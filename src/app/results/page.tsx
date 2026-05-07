@@ -16,6 +16,77 @@ const TOPIC_GROUPS: { weekRange: string; label: string; weeks: (number | string)
   { weekRange: "Synthesis", label: "Cross-Week Problems", weeks: ["synthesis"] },
 ];
 
+function exportResults(
+  title: string,
+  questions: typeof examSets[number]["questions"],
+  results: ExamResults,
+  questionResults: QuestionResult[]
+) {
+  const lines: string[] = [];
+
+  lines.push(`# ${title} — Results`);
+  lines.push("");
+  lines.push(`**Raw Score:** ${results.rawScore}/${results.totalQuestions}  `);
+  lines.push(`**With Partial Credit:** ${results.adjustedScore.toFixed(1)}  `);
+  lines.push(`**Percentage:** ${results.percentage}%  `);
+  lines.push(`**Time:** ${Math.floor(results.timeElapsed / 60)}m ${results.timeElapsed % 60}s`);
+  lines.push("");
+
+  lines.push("## Performance by Topic");
+  for (const topic of results.topicScores) {
+    lines.push(`- **${topic.weekRange}** (${topic.label}): ${topic.correct}/${topic.total} (${topic.percentage}%)`);
+  }
+  lines.push("");
+
+  lines.push("## Question Review");
+  lines.push("");
+
+  questions.forEach((q, idx) => {
+    const result = questionResults.find((r) => r.questionId === q.id);
+    if (!result) return;
+
+    const weekLabel = Array.isArray(q.week) ? q.week.join(", ") : String(q.week);
+    const status = result.isCorrect ? "✓ Correct" : result.isPartialCredit ? "~ Partial Credit" : "✗ Incorrect";
+
+    lines.push(`### Problem ${idx + 1} (Week ${weekLabel})`);
+    lines.push(`**Status:** ${status}`);
+    lines.push("");
+    lines.push(`**Question:** ${q.stem}`);
+    lines.push("");
+    for (const opt of q.options) {
+      const marker = opt.letter === result.yourAnswer
+        ? opt.letter === q.correctAnswer ? " ✓ (your answer, correct)" : " ✗ (your answer)"
+        : opt.letter === q.correctAnswer ? " ✓ (correct answer)" : "";
+      lines.push(`- **${opt.letter}.** ${opt.text}${marker}`);
+    }
+    lines.push("");
+    if (!result.isCorrect) {
+      lines.push(`**Explanation:** ${q.explanation}`);
+      lines.push("");
+    }
+    if (q.distractorAnalysis.length > 0 && !result.isCorrect) {
+      lines.push("**Distractor Analysis:**");
+      for (const d of q.distractorAnalysis) {
+        lines.push(`- (${d.option}) [${d.type}]: ${d.reason}`);
+      }
+      lines.push("");
+    }
+    lines.push("---");
+    lines.push("");
+  });
+
+  const markdown = lines.join("\n");
+  const blob = new Blob([markdown], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${title.replace(/\s+/g, "-").toLowerCase()}-results.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function computeResults(questions: typeof examSets[number]["questions"], answers: Record<number, string>, startTime: number | null, endTime: number | null): ExamResults {
   const questionResults: QuestionResult[] = questions.map((q) => {
     const yourAnswer = (answers[q.id] ?? null) as string | null;
@@ -243,7 +314,7 @@ export default function ResultsPage() {
         </div>
 
         {/* Retake button */}
-        <div className="text-center pb-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pb-8">
           <button
             onClick={() => {
               resetExam();
@@ -252,6 +323,12 @@ export default function ResultsPage() {
             className="px-6 py-3 bg-exam-blue text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             Back to Exam Selection
+          </button>
+          <button
+            onClick={() => exportResults(activeSet?.title ?? "Exam", questions, results, results.questionResults)}
+            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Export Results
           </button>
         </div>
       </div>
