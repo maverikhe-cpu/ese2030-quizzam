@@ -75,12 +75,19 @@ export default function ResultsPage() {
   const router = useRouter();
   const { examStatus, examSetId, answers, startTime, endTime, resetExam } = useExamStore();
   const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Wait for Zustand persist to rehydrate from localStorage before checking examStatus
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
+    if (!hydrated) return;
     if (examStatus !== "submitted") {
       router.push("/");
     }
-  }, [examStatus, router]);
+  }, [hydrated, examStatus, router]);
 
   const activeSet = examSets.find((s) => s.id === examSetId);
   const questions = activeSet?.questions ?? [];
