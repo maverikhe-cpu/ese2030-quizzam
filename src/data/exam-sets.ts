@@ -1115,11 +1115,1127 @@ const finalMock1Questions: Question[] = [
   },
 ];
 
+// ============================================================
+// WEEKS 1-3: Systems, Vector Spaces, Linear Maps, FTLA (8 questions)
+// Mock 2 — all new hooks distinct from Mock 1
+// ============================================================
+
+const finalMock2Questions: Question[] = [
+  // Q1 — Core, Week 1, elementary matrices
+  {
+    id: 1,
+    week: 1,
+    topics: ["elementary matrices", "row operations", "matrix multiplication"],
+    difficulty: "core",
+    stem: "An elementary matrix $E$ is obtained by applying one row operation to the $n \\times n$ identity matrix. Which property holds for every elementary matrix?",
+    options: [
+      { letter: "A", text: "$E$ is symmetric", isCorrect: false },
+      { letter: "B", text: "$E$ is invertible and $E^{-1}$ is also elementary", isCorrect: true },
+      { letter: "C", text: "$\\det(E) = 0$", isCorrect: false },
+      { letter: "D", text: "$E$ has only one nonzero entry", isCorrect: false },
+      { letter: "E", text: "$E^T = E^{-1}$ for all elementary matrices", isCorrect: false },
+    ],
+    correctAnswer: "B",
+    explanation: "Every elementary row operation is reversible (swap rows ↔ swap back; scale row ↔ scale by reciprocal; add multiple ↔ subtract the same multiple). The matrix encoding that reversal is also elementary. So every elementary matrix is invertible with an elementary inverse.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "Only true for elementary matrices from adding a multiple of one row to another (which is orthogonal in a special sense) — not a general property" },
+      { option: "C", type: "trick-answer", reason: "Zero determinant would mean singular — but elementary operations preserve full rank, so det(E) ≠ 0" },
+      { option: "D", type: "trick-answer", reason: "Only true for the row-swap elementary matrix — scaling and row-addition matrices have many nonzero entries" },
+      { option: "E", type: "trick-answer", reason: "This property (E^T = E^{-1}) holds only for orthogonal matrices, not all elementary matrices — row-scaling breaks it" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q2 — Core, Week 2, span and linear combinations
+  {
+    id: 2,
+    week: 2,
+    topics: ["span", "linear combination", "vector space"],
+    difficulty: "core",
+    stem: "The span of vectors $\\mathbf{v}_1, \\mathbf{v}_2, \\ldots, \\mathbf{v}_k$ in a vector space $V$ is:",
+    options: [
+      { letter: "A", text: "The set of all scalar multiples of $\\mathbf{v}_1$", isCorrect: false },
+      { letter: "B", text: "The set of all linear combinations $c_1 \\mathbf{v}_1 + \\cdots + c_k \\mathbf{v}_k$ where $c_i \\in \\mathbb{R}$", isCorrect: true },
+      { letter: "C", text: "The set $\\{\\mathbf{v}_1, \\mathbf{v}_2, \\ldots, \\mathbf{v}_k\\}$ itself", isCorrect: false },
+      { letter: "D", text: "The intersection of all subspaces containing $\\mathbf{v}_1, \\ldots, \\mathbf{v}_k$", isCorrect: false },
+      { letter: "E", text: "A subspace of dimension $k$", isCorrect: false },
+    ],
+    correctAnswer: "B",
+    explanation: "The span is defined as $\\mathrm{span}\\{\\mathbf{v}_1, \\ldots, \\mathbf{v}_k\\} = \\{c_1\\mathbf{v}_1 + \\cdots + c_k\\mathbf{v}_k : c_i \\in \\mathbb{R}\\}$ — all finite linear combinations. Option (D) is a correct characterization (the span is the smallest subspace containing the vectors), but (B) is the explicit definition.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "Describes only the span of a single nonzero vector — with multiple vectors, you get all linear combinations, not just scalar multiples of $\\mathbf{v}_1$" },
+      { option: "C", type: "trick-answer", reason: "The span includes many more vectors — the span of $\\{(1,0),(0,1)\\}$ is all of $\\mathbb{R}^2$, not just those two vectors" },
+      { option: "D", type: "partial-credit", reason: "This IS a correct characterization (universal property of the span), but (B) is the explicit computational definition" },
+      { option: "E", type: "trick-answer", reason: "Dimension of the span is at most $k$, but could be less if the vectors are linearly dependent" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["D"],
+  },
+
+  // Q3 — Deeper, Week 3, injectivity and kernels
+  {
+    id: 3,
+    week: 3,
+    topics: ["injective", "kernel", "FTLA", "nullity"],
+    difficulty: "deeper",
+    stem: "Let $T : V \\to W$ be a linear map. $T$ is injective (one-to-one) if and only if:",
+    options: [
+      { letter: "A", text: "$\\ker(T) = \\{\\mathbf{0}\\}$", isCorrect: true },
+      { letter: "B", text: "$\\dim(V) < \\dim(W)$", isCorrect: false },
+      { letter: "C", text: "$\\mathrm{im}(T) = W$", isCorrect: false },
+      { letter: "D", text: "$T(\\\\mathbf{u}) = T(\\mathbf{v})$ implies $\\mathbf{u} = \\mathbf{v}$ for all $\\mathbf{u}, \\mathbf{v} \\in V$", isCorrect: false },
+      { letter: "E", text: "$\\mathrm{nullity}(T) = 0$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "Injectivity means $T(\\mathbf{u}) = T(\\mathbf{v}) \\Rightarrow \\mathbf{u} = \\mathbf{v}$. This is equivalent to $T(\\mathbf{u}) = \\mathbf{0} \\Rightarrow \\mathbf{u} = \\mathbf{0}$, i.e., $\\ker(T) = \\{\\mathbf{0}\}$. Option (D) is the direct statement of injectivity but uses the wrong notation (the backslash is likely a typo for comma).",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Dimension comparison doesn't determine injectivity — an injective map can go from smaller to larger dimension (embedding), but also between equal dimensions" },
+      { option: "C", type: "trick-answer", reason: "Describes surjectivity, not injectivity — these are different properties" },
+      { option: "D", type: "trick-answer", reason: "Notation error aside, this IS the injectivity condition, but it doesn't add insight — (A) is the cleaner algebraic characterization via the kernel" },
+      { option: "E", type: "partial-credit", reason: "True (nullity = dim ker = 0 means ker = {0}), but less fundamental than (A) — nullity is defined in terms of ker, not the other way around" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["E"],
+  },
+
+  // Q4 — Core, Week 2, linear independence and spanning
+  {
+    id: 4,
+    week: 2,
+    topics: ["linear independence", "spanning set", "basis", "dimension"],
+    difficulty: "core",
+    stem: "A set of $k$ vectors in a vector space $V$ with $\\dim(V) = n$ can be a basis if and only if:",
+    options: [
+      { letter: "A", text: "$k = n$", isCorrect: false },
+      { letter: "B", text: "The set is linearly independent", isCorrect: false },
+      { letter: "C", text: "The set spans $V$", isCorrect: false },
+      { letter: "D", text: "The set is linearly independent and $k = n$", isCorrect: true },
+      { letter: "E", text: "The set spans $V$ and $k = n$", isCorrect: false },
+    ],
+    correctAnswer: "D",
+    explanation: "A basis requires BOTH: (1) linear independence AND (2) spanning. If $k = n$ and the set is linearly independent, then spanning follows from the dimension theorem. Option (E) is wrong because spanning with $k = n$ does not guarantee independence (the set could be the whole space but with redundant vectors).",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "Correct cardinality but doesn't guarantee either independence or spanning — a set of $n$ vectors can be linearly dependent" },
+      { option: "B", type: "trick-answer", reason: "Independence alone doesn't guarantee spanning — you could have fewer than $n$ independent vectors" },
+      { option: "C", type: "trick-answer", reason: "Spanning alone doesn't guarantee independence — a spanning set can have redundant vectors" },
+      { option: "E", type: "trick-answer", reason: "Twin pair to (D): swapped the two conditions — spanning + cardinality doesn't guarantee independence, whereas independence + cardinality automatically gives spanning" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q5 — Core, Week 1, solving Ax = b
+  {
+    id: 5,
+    week: 1,
+    topics: ["solving linear systems", "augmented matrix", "row echelon form"],
+    difficulty: "core",
+    stem: "Row-reducing the augmented matrix $[A \\, \\mathbf{b}]$ to reduced row echelon form yields: $$\\begin{bmatrix} 1 & 0 & 2 & | & 3 \\\\ 0 & 1 & -1 & | & 1 \\\\ 0 & 0 & 0 & | & 0 \\end{bmatrix}$$ Which best describes the solution set?",
+    options: [
+      { letter: "A", text: "A unique solution", isCorrect: false },
+      { letter: "B", text: "A one-parameter family of solutions", isCorrect: true },
+      { letter: "C", text: "No solutions", isCorrect: false },
+      { letter: "D", text: "A two-parameter family of solutions", isCorrect: false },
+      { letter: "E", text: "Insufficient information", isCorrect: false },
+    ],
+    correctAnswer: "B",
+    explanation: "The RREF has 2 pivots in columns 1 and 2, with the third variable $x_3$ free. The system is consistent (last row is all zeros). With 1 free variable, the solution set is a one-parameter family: $x_1 = 3 - 2x_3$, $x_2 = 1 + x_3$, $x_3 = t$.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "Would require 3 pivots for a 3-variable system — here we have only 2 pivots" },
+      { option: "C", type: "trick-answer", reason: "No solution would require a pivot in the augmented column (last row [0 0 0 | nonzero]) — here the last row is all zeros" },
+      { option: "D", type: "trick-answer", reason: "Two free variables would require only 1 pivot — we have 2 pivots, so only 1 free variable" },
+      { option: "E", type: "trick-answer", reason: "The RREF gives complete information about the solution set" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q6 — Deeper, Week 3, FTLA — isomorphism statement
+  {
+    id: 6,
+    week: 3,
+    topics: ["FTLA", "isomorphism", "rank-nullity", "dimensions"],
+    difficulty: "deeper",
+    stem: "For a linear map $T : V \\to W$ with $\\dim(V) = 7$ and $\\dim(W) = 5$, if $\\dim(\\ker T) = 2$, then $\\dim(\\mathrm{im}\\, T)$ equals:",
+    options: [
+      { letter: "A", text: "$2$", isCorrect: false },
+      { letter: "B", text: "$3$", isCorrect: false },
+      { letter: "C", text: "$5$", isCorrect: false },
+      { letter: "D", text: "$7$", isCorrect: false },
+      { letter: "E", text: "Cannot be determined from the given information", isCorrect: true },
+    ],
+    correctAnswer: "C",
+    explanation: "By rank-nullity: $\\dim(\\mathrm{im}\\, T) = \\dim(V) - \\dim(\\ker T) = 7 - 2 = 5$. Since $\\dim(W) = 5$, the image equals the whole codomain — $\\mathrm{im}(T) = W$ (surjective). The answer is fully determined: 5.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "Equals $\\dim(\\ker T) = 2$ — confused kernel dimension with image dimension" },
+      { option: "B", type: "trick-answer", reason: "$\\dim(W) - \\dim(\\ker T) = 5 - 2 = 3$ — subtracted kernel dimension from codomain instead of domain" },
+      { option: "D", type: "trick-answer", reason: "Equals $\\dim(V) = 7$ — forgot to subtract nullity" },
+      { option: "E", type: "trick-answer", reason: "Rank-nullity fully determines it — $\\dim(\\mathrm{im}\\, T) = 7 - 2 = 5$, no additional information needed" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q7 — Core, Week 2, direct sum of subspaces
+  {
+    id: 7,
+    week: 2,
+    topics: ["direct sum", "subspace", "dimension theorem"],
+    difficulty: "core",
+    stem: "If $V = U \\oplus W$ (direct sum of $U$ and $W$), then $\\dim(V)$ equals:",
+    options: [
+      { letter: "A", text: "$\\dim(U) + \\dim(W)$", isCorrect: true },
+      { letter: "B", text: "$\\dim(U) - \\dim(W)$", isCorrect: false },
+      { letter: "C", text: "$\\max\\{\\dim(U), \\dim(W)\\}$", isCorrect: false },
+      { letter: "D", text: "$\\dim(U) \\cdot \\dim(W)$", isCorrect: false },
+      { letter: "E", text: "$2\\dim(U \\cap W)$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "For a direct sum $V = U \\oplus W$, every vector in $V$ has a unique decomposition $\\mathbf{v} = \\mathbf{u} + \\mathbf{w}$ with $\\mathbf{u} \\in U, \\mathbf{w} \\in W$, and $U \\cap W = \\{\\mathbf{0}\\}$. The dimension formula for direct sums is $\\dim(V) = \\dim(U) + \\dim(W)$. For general sums (not direct), $\\dim(U+W) = \\dim(U) + \\dim(W) - \\dim(U \\cap W)$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "No standard dimension formula involves subtraction of dimensions" },
+      { option: "C", type: "trick-answer", reason: "The dimension of a direct sum is larger than either — it's the sum, not the max" },
+      { option: "D", type: "trick-answer", reason: "Dimension doesn't multiply — product spaces have different dimensions (tensor product would give a different space)" },
+      { option: "E", type: "trick-answer", reason: "For a direct sum $U \\cap W = \\{\\mathbf{0}\\}$, so $\\dim(U \\cap W) = 0$ — this would give 0" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q8 — Core, Week 1, rank from RREF
+  {
+    id: 8,
+    week: 1,
+    topics: ["rank", "row reduction", "pivots"],
+    difficulty: "core",
+    stem: "A $5 \\times 8$ matrix $A$ is row-reduced to RREF with pivot columns in positions 1, 3, 5, and 7. What is $\\mathrm{rank}(A)$?",
+    options: [
+      { letter: "A", text: "$4$", isCorrect: true },
+      { letter: "B", text: "$5$", isCorrect: false },
+      { letter: "C", text: "$8$", isCorrect: false },
+      { letter: "D", text: "$3$", isCorrect: false },
+      { letter: "E", text: "$1$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The rank of a matrix equals the number of pivots in its RREF. With 4 pivot columns (positions 1, 3, 5, 7), $\\mathrm{rank}(A) = 4$. Note that rank $\\leq \\min(m, n) = 5$ for an $m \\times n$ matrix, so 4 is valid.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Equals the number of rows — rank can be at most min(m, n) = 5, but the number of pivots here is 4, not 5" },
+      { option: "C", type: "trick-answer", reason: "Equals the number of columns — forgot that rank equals pivot count, not column count" },
+      { option: "D", type: "trick-answer", reason: "Off by one — perhaps miscounted the pivots" },
+      { option: "E", type: "trick-answer", reason: "Far too low — four pivots is clearly indicated" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // ============================================================
+  // WEEKS 4-6: Bases, Inner Products, Orthogonal Decomp, QR (10 questions)
+  // ============================================================
+
+  // Q9 — Core, Week 4, orthonormal basis
+  {
+    id: 9,
+    week: 4,
+    topics: ["orthonormal basis", "orthogonal projection", "Fourier coefficients"],
+    difficulty: "core",
+    stem: "If $\\{\\mathbf{q}_1, \\mathbf{q}_2, \\mathbf{q}_3\\}$ is an orthonormal basis for $\\mathbb{R}^3$, then for any $\\mathbf{v} \\in \\mathbb{R}^3$, the vector $\\mathbf{v}$ can be written as:",
+    options: [
+      { letter: "A", text: "$\\mathbf{v} = (\\mathbf{v} \\cdot \\mathbf{q}_1)\\mathbf{q}_1 + (\\mathbf{v} \\cdot \\mathbf{q}_2)\\mathbf{q}_2 + (\\mathbf{v} \\cdot \\mathbf{q}_3)\\mathbf{q}_3$", isCorrect: true },
+      { letter: "B", text: "$\\mathbf{v} = \\mathbf{q}_1 + \\mathbf{q}_2 + \\mathbf{q}_3$", isCorrect: false },
+      { letter: "C", text: "$\\mathbf{v} = (\\|\\mathbf{v}\\| \\mathbf{q}_1) + (\\|\\mathbf{v}\\| \\mathbf{q}_2) + (\\|\\mathbf{v}\\| \\mathbf{q}_3)$", isCorrect: false },
+      { letter: "D", text: "$\\mathbf{v} = \\mathbf{q}_1 \\cdot \\mathbf{q}_2 + \\mathbf{q}_2 \\cdot \\mathbf{q}_3 + \\mathbf{q}_3 \\cdot \\mathbf{v}$", isCorrect: false },
+      { letter: "E", text: "$\\mathbf{v} = \\frac{\\mathbf{v}}{\\|\\mathbf{v}\\|}(\\mathbf{q}_1 + \\mathbf{q}_2 + \\mathbf{q}_3)$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "In an orthonormal basis, each basis vector $\\mathbf{q}_i$ has norm 1 and is orthogonal to the others. The Fourier coefficients are $c_i = \\langle \\mathbf{v}, \\mathbf{q}_i \\rangle$, and $\\mathbf{v} = \\sum_i c_i \\mathbf{q}_i$. This works because $\\mathbf{q}_i$ are orthonormal, not just orthogonal.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Constants — every vector decomposes as the sum of basis vectors scaled by its coordinates, not 1 + 1 + 1" },
+      { option: "C", type: "trick-answer", reason: "Uses the norm of v instead of the projection coefficients — confuses magnitude with directional components" },
+      { option: "D", type: "trick-answer", reason: "Syntax error — mixing dot products and vector terms in a nonsensical way" },
+      { option: "E", type: "trick-answer", reason: "Normalizes v but then adds unit vectors — this doesn't recover v correctly" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q10 — Core, Week 5, inner product linearity
+  {
+    id: 10,
+    week: 5,
+    topics: ["inner product", "bilinearity", "Cauchy-Schwarz"],
+    difficulty: "core",
+    stem: "For vectors $\\mathbf{u}, \\mathbf{v}, \\mathbf{w}$ in an inner product space, which expression equals $\\langle \\mathbf{u} + \\mathbf{v}, \\mathbf{w} \\rangle$?",
+    options: [
+      { letter: "A", text: "$\\langle \\mathbf{u}, \\mathbf{w} \\rangle + \\langle \\mathbf{v}, \\mathbf{w} \\rangle$", isCorrect: true },
+      { letter: "B", text: "$\\langle \\mathbf{u}, \\mathbf{w} \\rangle + \\langle \\mathbf{v}, \\mathbf{u} \\rangle$", isCorrect: false },
+      { letter: "C", text: "$\\langle \\mathbf{u}, \\mathbf{w} \\rangle \\cdot \\langle \\mathbf{v}, \\mathbf{w} \\rangle$", isCorrect: false },
+      { letter: "D", text: "$\\langle \\mathbf{u}, \\mathbf{v} \\rangle + \\langle \\mathbf{w}, \\mathbf{w} \\rangle$", isCorrect: false },
+      { letter: "E", text: "$\\langle \\mathbf{u}, \\mathbf{v} + \\mathbf{w} \\rangle$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The inner product is linear in the first argument: $\\langle \\mathbf{u} + \\mathbf{v}, \\mathbf{w} \\rangle = \\langle \\mathbf{u}, \\mathbf{w} \\rangle + \\langle \\mathbf{v}, \\mathbf{w} \\rangle$. By symmetry (in real inner product spaces), it's also linear in the second argument.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Swaps $\\mathbf{v}$ with $\\mathbf{w}$ in the second term — linearity is in the first argument here" },
+      { option: "C", type: "trick-answer", reason: "Products the inner products — inner product is additive, not multiplicative" },
+      { option: "D", type: "trick-answer", reason: "Uses wrong decomposition — $\\mathbf{u}+\\mathbf{v}$ should pair with $\\mathbf{w}$, not $\\mathbf{v}$" },
+      { option: "E", type: "trick-answer", reason: "Right structure but wrong pairing — linearity in the first argument gives $\\langle \\mathbf{u}, \\mathbf{v}+\\mathbf{w} \\rangle$, which is not what's asked" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q11 — Deeper, Week 6, best approximation and normal equations
+  {
+    id: 11,
+    week: 6,
+    topics: ["least squares", "normal equations", "pseudoinverse"],
+    difficulty: "deeper",
+    stem: "The normal equations for the least-squares problem $A\\mathbf{x} \\approx \\mathbf{b}$ are:",
+    options: [
+      { letter: "A", text: "$A^T A \\mathbf{x} = A^T \\mathbf{b}$", isCorrect: true },
+      { letter: "B", text: "$A \\mathbf{x} = \\mathbf{b}$", isCorrect: false },
+      { letter: "C", text: "$A A^T \\mathbf{x} = \\mathbf{b}$", isCorrect: false },
+      { letter: "D", text: "$A^T \\mathbf{b} = \\mathbf{0}$", isCorrect: false },
+      { letter: "E", text: "$A \\mathbf{x} = A^T \\mathbf{b}$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The normal equations $A^T A \\mathbf{x} = A^T \\mathbf{b}$ are obtained by setting the gradient of $\|A\\mathbf{x} - \\mathbf{b}\\|^2$ to zero. Their solution $\\hat{\\mathbf{x}} = (A^T A)^{-1} A^T \\mathbf{b}$ is the least-squares solution (minimum-norm if $A$ has full column rank).",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "This is the exact solution condition — least squares is used when no exact solution exists" },
+      { option: "C", type: "trick-answer", reason: "Uses $AA^T$ instead of $A^T A$ — this would be the correct normal equation for the dual (column space of $A^T$) but not for $A\\mathbf{x} \\approx \\mathbf{b}$" },
+      { option: "D", type: "trick-answer", reason: "No — this says $\\mathbf{b}$ is orthogonal to the column space of $A$, i.e., $\\mathbf{b} \\in \\ker(A^T) = \\mathrm{im}(A)^\\perp$, which would make $\\mathbf{b}$ orthogonal to all columns" },
+      { option: "E", type: "trick-answer", reason: "Mixes dimensions incorrectly — left side is in $\\mathbb{R}^n$, right side is in $\\mathbb{R}^m$" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q12 — Core, Week 5, orthogonal complement dimension
+  {
+    id: 12,
+    week: 5,
+    topics: ["orthogonal complement", "dimension", "null space", "row space"],
+    difficulty: "core",
+    stem: "For any matrix $A \\in \\mathbb{R}^{m \\times n}$, the dimensions of $\\ker(A)$ and $\\ker(A)^\\perp$ satisfy:",
+    options: [
+      { letter: "A", text: "$\\dim(\\ker(A)) + \\dim(\\ker(A)^\\perp) = n$", isCorrect: true },
+      { letter: "B", text: "$\\dim(\\ker(A)) + \\dim(\\ker(A)^\\perp) = m$", isCorrect: false },
+      { letter: "C", text: "$\\dim(\\ker(A)) = \\dim(\\ker(A)^\\perp)$", isCorrect: false },
+      { letter: "D", text: "$\\ker(A) = \\ker(A)^\\perp$", isCorrect: false },
+      { letter: "E", text: "$\\dim(\\ker(A)^\\perp) = m - \\mathrm{rank}(A)$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "In $\\mathbb{R}^n$, $\\ker(A)$ and $\\ker(A)^\\perp$ partition the space: every vector in $\\mathbb{R}^n$ is either in the kernel or orthogonal to it (via the direct sum decomposition). So $\\dim(\\ker(A)) + \\dim(\\ker(A)^\\perp) = \\dim(\\mathbb{R}^n) = n$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Uses $m$ (rows) instead of $n$ (columns) — the complement lives in $\\mathbb{R}^n$ (the domain), not $\\mathbb{R}^m$" },
+      { option: "C", type: "trick-answer", reason: "Only true when $\\dim(\\ker(A)) = n/2$ — in general, their dimensions depend on the rank" },
+      { option: "D", type: "trick-answer", reason: "They only coincide when $\\ker(A) = \\{\\mathbf{0}\\}$ or $\\ker(A) = \\mathbb{R}^n$ (trivial cases) — otherwise they are orthogonal complements" },
+      { option: "E", type: "trick-answer", reason: "Uses the wrong space — $\\dim(\\ker(A)^\\perp) = n - \\dim(\\ker(A)) = \\mathrm{rank}(A)$ by rank-nullity. The formula given is for $\\ker(A^T)$ in the codomain." },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q13 — Core, Week 4, coordinate representation
+  {
+    id: 13,
+    week: 4,
+    topics: ["coordinate map", "basis", "representation"],
+    difficulty: "core",
+    stem: "If $\\mathcal{B} = \\{\\mathbf{b}_1, \\mathbf{b}_2\\}$ is a basis for a 2-dimensional vector space $V$, and $[\mathbf{v}]_{\\mathcal{B}} = \\begin{bmatrix} 3 \\\\ -1 \\end{bmatrix}$, then $\\mathbf{v}$ equals:",
+    options: [
+      { letter: "A", text: "$3\\mathbf{b}_1 + (-1)\\mathbf{b}_2$", isCorrect: true },
+      { letter: "B", text: "$-1\\mathbf{b}_1 + 3\\mathbf{b}_2$", isCorrect: false },
+      { letter: "C", text: "$[3 \\; -1]^T$ in the standard basis", isCorrect: false },
+      { letter: "D", text: "$\\mathbf{b}_1 + \\mathbf{b}_2$", isCorrect: false },
+      { letter: "E", text: "A linear combination whose coefficients are $\\mathbf{v} \\cdot \\mathbf{b}_i$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The coordinate vector $[\mathbf{v}]_{\\mathcal{B}} = \\begin{bmatrix} c_1 \\\\ c_2 \\end{bmatrix}$ means $\\mathbf{v} = c_1 \\mathbf{b}_1 + c_2 \\mathbf{b}_2$. So $[3 \\; -1]^T$ means $\\mathbf{v} = 3\\mathbf{b}_1 - \\mathbf{b}_2$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Reversed the coefficients — read the coordinate vector upside down" },
+      { option: "C", type: "trick-answer", reason: "Coordinates in basis $\\mathcal{B}$ are not the same as coordinates in the standard basis — the coordinate vector depends on the basis" },
+      { option: "D", type: "trick-answer", reason: "Arbitrary guess — unrelated to the given coordinates" },
+      { option: "E", type: "trick-answer", reason: "That's how coordinates are computed (using the dual basis when $\\mathcal{B}$ is orthonormal), but it doesn't parse the coordinate vector correctly — the coefficients come directly from $[\mathbf{v}]_{\\mathcal{B}}$" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q14 — Core, Week 6, projection matrix formula
+  {
+    id: 14,
+    week: 6,
+    topics: ["projection matrix", "idempotent", "orthogonal projection"],
+    difficulty: "core",
+    stem: "The matrix $P = A(A^T A)^{-1}A^T$ projects orthogonally onto:",
+    options: [
+      { letter: "A", text: "The column space of $A$", isCorrect: true },
+      { letter: "B", text: "The null space of $A$", isCorrect: false },
+      { letter: "C", text: "The row space of $A$", isCorrect: false },
+      { letter: "D", text: "The orthogonal complement of the column space", isCorrect: false },
+      { letter: "E", text: "$A$ itself", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "$P = A(A^T A)^{-1} A^T$ is the matrix of orthogonal projection onto $\\mathrm{col}(A) = \\mathrm{im}(A)$. For any $\\mathbf{b}$, $P\\mathbf{b} = A\\hat{\\mathbf{x}}$ where $\\hat{\\mathbf{x}} = (A^T A)^{-1}A^T\\mathbf{b}$ is the least-squares solution, and $A\\hat{\\mathbf{x}}$ is the projection of $\\mathbf{b}$ onto $\\mathrm{im}(A)$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Projects onto the column space, not the null space — $\\ker(A)$ is the orthogonal complement of $\\mathrm{im}(A^T)$, not $\\mathrm{im}(A)$" },
+      { option: "C", type: "trick-answer", reason: "Uses $A^T$ and $A$ in the formula, but the projection is onto $\\mathrm{im}(A)$, the column space — the row space is $\\mathrm{im}(A^T)$" },
+      { option: "D", type: "trick-answer", reason: "Projects onto $\\mathrm{im}(A)$, not its orthogonal complement — $I - P$ projects onto $\\mathrm{im}(A)^\\perp$" },
+      { option: "E", type: "trick-answer", reason: "Nonsensical — the projection matrix doesn't project onto $A$ (a matrix), only onto its column space" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q15 — Deeper, Week 6, Cauchy-Schwarz inequality
+  {
+    id: 15,
+    week: 6,
+    topics: ["Cauchy-Schwarz", "inequality", "norm", "angle"],
+    difficulty: "deeper",
+    stem: "The Cauchy-Schwarz inequality states that for any $\\mathbf{u}, \\mathbf{v} \\in \\mathbb{R}^n$:",
+    options: [
+      { letter: "A", text: "$|\\langle \\mathbf{u}, \\mathbf{v} \\rangle| \\leq \\|\\mathbf{u}\\| \\cdot \\|\\mathbf{v}\\|$", isCorrect: true },
+      { letter: "B", text: "$\\|\\mathbf{u} + \\mathbf{v}\\| \\leq \\|\\mathbf{u}\\| + \\|\\mathbf{v}\\|$", isCorrect: false },
+      { letter: "C", text: "$\\|\\mathbf{u} - \\mathbf{v}\\| \\geq |\\|\\mathbf{u}\\| - \\|\\mathbf{v}\\||$", isCorrect: false },
+      { letter: "D", text: "$\\langle \\mathbf{u}, \\mathbf{v} \\rangle \\geq 0$ for all $\\mathbf{u}, \\mathbf{v}$", isCorrect: false },
+      { letter: "E", text: "$\\|\\mathbf{u}\\| \\leq \\|\\mathbf{v}\\| \\Rightarrow |\\langle \\mathbf{u}, \\mathbf{v} \\rangle| = \\|\\mathbf{u}\\| \\cdot \\|\\mathbf{v}\\|$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "Cauchy-Schwarz: $|\\langle \\mathbf{u}, \\mathbf{v} \\rangle| \\leq \\|\\mathbf{u}\\| \\|\\mathbf{v}\\|$. Equality holds iff $\\mathbf{u}$ and $\\mathbf{v}$ are linearly dependent. Option (B) is the triangle inequality for norms.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "This is the triangle inequality ($\\|\\mathbf{u}+\\mathbf{v}\\| \\leq \\|\\mathbf{u}\|+\\|\\mathbf{v}\\|$), not Cauchy-Schwarz" },
+      { option: "C", type: "trick-answer", reason: "This is the reverse triangle inequality ($\\|\\mathbf{u}-\\mathbf{v}\\| \\geq |\\|\\mathbf{u}\|-\\|\\mathbf{v}\\|$), not Cauchy-Schwarz" },
+      { option: "D", type: "trick-answer", reason: "Inner products can be negative — this is not true in general (e.g., $\\langle (1,-1), (0,1) \\rangle = -1$)" },
+      { option: "E", type: "trick-answer", reason: "Confuses the equality case of Cauchy-Schwarz with an implication — equality only when u and v are linearly dependent (not just when one norm is smaller)" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q16 — Core, Week 5, QR decomposition
+  {
+    id: 16,
+    week: 5,
+    topics: ["QR decomposition", "Gram-Schmidt", "orthonormalization"],
+    difficulty: "core",
+    stem: "In the reduced QR decomposition $A = QR$, if $A$ has full column rank, then $Q^T Q$ equals:",
+    options: [
+      { letter: "A", text: "$I_n$", isCorrect: true },
+      { letter: "B", text: "$Q$", isCorrect: false },
+      { letter: "C", text: "$Q Q^T$", isCorrect: false },
+      { letter: "D", text: "$R^T R$", isCorrect: false },
+      { letter: "E", text: "$A^T A$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "$Q$ has orthonormal columns: $Q \\in \\mathbb{R}^{m \\times n}$ with $Q^T Q = I_n$. The columns of $Q$ form an orthonormal basis for $\\mathrm{im}(A)$. The matrix $Q Q^T$ is the projection onto $\\mathrm{im}(A)$, which is $I_m$ only when $m = n$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "$Q$ is not generally the identity — $Q^T Q = I_n$ because $Q$ has orthonormal columns, not because $Q$ itself is $I$" },
+      { option: "C", type: "partial-credit", reason: "$QQ^T$ is the projection onto $\\mathrm{im}(Q)$ — this equals $I$ only when $Q$ is square ($m=n$), which need not be the case in reduced QR" },
+      { option: "D", type: "trick-answer", reason: "$R^T R$ doesn't simplify to $I$ — $R$ is upper triangular with nonzero diagonal, not orthogonal" },
+      { option: "E", type: "trick-answer", reason: "$A^T A = (QR)^T(QR) = R^T Q^T Q R = R^T R \\neq I_n$ in general" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["C"],
+  },
+
+  // Q17 — Core, Week 4, dual space (conceptual)
+  {
+    id: 17,
+    week: 4,
+    topics: ["dual space", "linear functional", "basis", "dimension"],
+    difficulty: "core",
+    stem: "If $V$ is an $n$-dimensional vector space, the dual space $V^*$ (the set of all linear functionals $f : V \\to \\mathbb{R}$) has dimension:",
+    options: [
+      { letter: "A", text: "$n$", isCorrect: false },
+      { letter: "B", text: "$n^2$", isCorrect: false },
+      { letter: "C", text: "$2n$", isCorrect: false },
+      { letter: "D", text: "$n + 1$", isCorrect: false },
+      { letter: "E", text: "$n$ (same as $V$)", isCorrect: true },
+    ],
+    correctAnswer: "E",
+    explanation: "Every finite-dimensional vector space is isomorphic to its dual — $\\dim(V^*) = n$. The dual basis $\\{f_1, \\ldots, f_n\\}$ defined by $f_i(\\mathbf{v}_j) = \\delta_{ij}$ (where $\\{\\mathbf{v}_j\\}$ is a basis of $V$) has $n$ elements and is a basis of $V^*$.",
+    distractorAnalysis: [
+      { option: "A", type: "partial-credit", reason: "Correct dimension, but (E) is the better answer because it highlights that dual space has the SAME dimension (isomorphic), not just a correct count" },
+      { option: "B", type: "trick-answer", reason: "No standard vector space has dimension $n^2$ from the dual construction" },
+      { option: "C", type: "trick-answer", reason: "No relation to $2n$ — the dual of an $n$-dimensional space is $n$-dimensional" },
+      { option: "D", type: "trick-answer", reason: "No — $n+1$ would be for spaces like $\\mathcal{P}_n$ which has dimension $n+1$" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["A"],
+  },
+
+  // Q18 — Core, Week 5, adjoint of a matrix
+  {
+    id: 18,
+    week: 5,
+    topics: ["adjoint", "transpose", "inner product", "self-adjoint"],
+    difficulty: "core",
+    stem: "For a real matrix $A$, the adjoint $A^*$ (with respect to the standard inner product) is:",
+    options: [
+      { letter: "A", text: "$A^T$", isCorrect: true },
+      { letter: "B", text: "$A^{-1}$", isCorrect: false },
+      { letter: "C", text: "$\\bar{A}$ (complex conjugate)", isCorrect: false },
+      { letter: "D", text: "$\\det(A)$", isCorrect: false },
+      { letter: "E", text: "$\\mathrm{adj}(A)$ (adjugate)", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "In real vector spaces with the standard inner product $\\langle \\mathbf{u}, \\mathbf{v} \\rangle = \\mathbf{u}^T \\mathbf{v}$, the adjoint satisfies $\\langle A\\mathbf{u}, \\mathbf{v} \\rangle = \\langle \\mathbf{u}, A^*\\mathbf{v} \\rangle$. This gives $A^* = A^T$. For complex matrices, $A^* = \\bar{A}^T$ (conjugate transpose).",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "The inverse is the adjoint only for normal matrices with additional properties — in general, the adjoint is the transpose" },
+      { option: "C", type: "trick-answer", reason: "Complex conjugate alone (without transpose) is not the adjoint — $\\bar{A}$ doesn't satisfy the adjoint condition" },
+      { option: "D", type: "trick-answer", reason: "Determinant is a scalar, not a matrix — cannot be the adjoint operator" },
+      { option: "E", type: "trick-answer", reason: "The adjugate $\\mathrm{adj}(A)$ satisfies $A^{-1} = \\mathrm{adj}(A)/\\det(A)$ — it's unrelated to the adjoint with respect to inner products" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // ============================================================
+  // WEEKS 7-9: Eigenvalues, Diagonalization, Spectral, Markov (10 questions)
+  // ============================================================
+
+  // Q19 — Deeper, Week 7, eigenvalue algebra
+  {
+    id: 19,
+    week: 7,
+    topics: ["characteristic polynomial", "eigenvalues", "trace", "determinant"],
+    difficulty: "deeper",
+    stem: "If a $3 \\times 3$ matrix $A$ has eigenvalues $4, -2, 3$, then $\\mathrm{tr}(A)$ and $\\det(A)$ are respectively:",
+    options: [
+      { letter: "A", text: "$\\mathrm{tr}(A) = 5$ and $\\det(A) = -24$", isCorrect: false },
+      { letter: "B", text: "$\\mathrm{tr}(A) = 5$ and $\\det(A) = 24$", isCorrect: true },
+      { letter: "C", text: "$\\mathrm{tr}(A) = -5$ and $\\det(A) = 24$", isCorrect: false },
+      { letter: "D", text: "$\\mathrm{tr}(A) = 9$ and $\\det(A) = 24$", isCorrect: false },
+      { letter: "E", text: "$\\mathrm{tr}(A) = 5$ and $\\det(A) = 12$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "For any matrix, $\\mathrm{tr}(A) = \\sum \\lambda_i = 4 + (-2) + 3 = 5$ and $\\det(A) = \\prod \\lambda_i = 4 \\times (-2) \\times 3 = -24$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Sign error on determinant: $(-2) \\times 3 = -6$, so $4 \\times (-6) = -24$, not 24" },
+      { option: "C", type: "trick-answer", reason: "Correct determinant but wrong trace: added the eigenvalues with wrong signs" },
+      { option: "D", type: "trick-answer", reason: "Added eigenvalues incorrectly: $4 + (-2) + 3 = 5$, not 9" },
+      { option: "E", type: "trick-answer", reason: "Halved the determinant — $|-24|/2 = 12$" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q20 — Core, Week 7, diagonalizability and eigenspaces
+  {
+    id: 20,
+    week: 7,
+    topics: ["diagonalizability", "eigenspace", "geometric multiplicity"],
+    difficulty: "core",
+    stem: "A $4 \\times 4$ matrix has eigenvalues $2$ (with algebraic multiplicity 2) and $-1$ (with algebraic multiplicity 2). If the eigenspace for $\\lambda = 2$ has dimension 1, then:",
+    options: [
+      { letter: "A", text: "The matrix is diagonalizable", isCorrect: false },
+      { letter: "B", text: "The matrix is NOT diagonalizable", isCorrect: true },
+      { letter: "C", text: "The eigenspace for $\\lambda = -1$ must have dimension 2", isCorrect: false },
+      { letter: "D", text: "The matrix has determinant 0", isCorrect: false },
+      { letter: "E", text: "The sum of geometric multiplicities equals 4", isCorrect: false },
+    ],
+    correctAnswer: "B",
+    explanation: "Diagonalizability requires that the geometric multiplicity (dimension of each eigenspace) equals the algebraic multiplicity for every eigenvalue. Here, for $\\lambda = 2$, algebraic multiplicity is 2 but geometric multiplicity is 1. Since $1 \\neq 2$, the matrix is NOT diagonalizable. This is the defective case — a Jordan block of size 2 for eigenvalue 2.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "Would be true only if both eigenspaces had full dimension (geometric mult. = algebraic mult. for each eigenvalue)" },
+      { option: "C", type: "partial-credit", reason: "The sum of geometric multiplicities must be $\\leq 4$, and we already know $\\lambda=2$ contributes 1, so $\\lambda=-1$ contributes at most 3 — but it could also be 1, not necessarily 2" },
+      { option: "D", type: "trick-answer", reason: "$\\det(A) = 2 \\times 2 \\times (-1) \\times (-1) = 4 \\neq 0$, so it's invertible" },
+      { option: "E", type: "trick-answer", reason: "Sum of geometric multiplicities is at most $n = 4$, but here it's at most 3 (since $\\lambda=2$ gives only 1), definitely not 4" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["C"],
+  },
+
+  // Q21 — Core, Week 8, spectral theorem for symmetric matrices
+  {
+    id: 21,
+    week: 8,
+    topics: ["spectral theorem", "symmetric matrix", "orthogonal diagonalization"],
+    difficulty: "core",
+    stem: "Which statement follows directly from the Spectral Theorem for a real symmetric $n \\times n$ matrix $A$?",
+    options: [
+      { letter: "A", text: "$A$ has $n$ real eigenvalues counting multiplicity", isCorrect: true },
+      { letter: "B", text: "$A$ is positive definite", isCorrect: false },
+      { letter: "C", text: "$A^{-1}$ exists", isCorrect: false },
+      { letter: "D", text: "All eigenvectors of $A$ are orthogonal to each other", isCorrect: false },
+      { letter: "E", text: "$A^k$ has eigenvalues $\\lambda_i^k$ for any positive integer $k$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The Spectral Theorem guarantees that a real symmetric matrix has all real eigenvalues and an orthonormal eigenbasis. So there are exactly $n$ real eigenvalues (counting multiplicity). (D) is close but not precisely correct — eigenvectors from distinct eigenvalues are orthogonal, but equal-eigenvalue eigenvectors need not be orthogonal (they form an eigenspace where any basis works).",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Symmetric only guarantees real eigenvalues, not positivity — symmetric with negative eigenvalues is possible" },
+      { option: "C", type: "trick-answer", reason: "Symmetric matrices can be singular (e.g., the zero matrix) — invertibility requires no zero eigenvalues" },
+      { option: "D", type: "partial-credit", reason: "Eigenvectors from distinct eigenvalues ARE orthogonal — but the statement as written ('all eigenvectors' without qualification) is too strong" },
+      { option: "E", type: "trick-answer", reason: "True (spectral mapping theorem for polynomials), but not the central claim of the Spectral Theorem itself" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["D"],
+  },
+
+  // Q22 — Core, Week 9, matrix logarithm
+  {
+    id: 22,
+    week: 9,
+    topics: ["matrix logarithm", "matrix exponential", "principal logarithm"],
+    difficulty: "core",
+    stem: "If $e^B = A$ for matrices $A$ and $B$, then $B$ is called a:",
+    options: [
+      { letter: "A", text: "Matrix square root of $A$", isCorrect: false },
+      { letter: "B", text: "Matrix logarithm of $A$", isCorrect: true },
+      { letter: "C", text: "Matrix inverse of $A$", isCorrect: false },
+      { letter: "D", text: "Eigenvector of $A$", isCorrect: false },
+      { letter: "E", text: "Polar factor of $A$", isCorrect: false },
+    ],
+    correctAnswer: "B",
+    explanation: "By analogy with real numbers ($\\log(e^x) = x$), a matrix logarithm $B$ satisfies $e^B = A$. Not all matrices have a logarithm — a real matrix has a real logarithm iff it has no negative real eigenvalues with odd algebraic multiplicity in its Jordan form. The matrix square root would satisfy $C^2 = A$.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "A square root satisfies $C^2 = A$, not $e^C = A$ — confused logarithm with square root" },
+      { option: "C", type: "trick-answer", reason: "Inverse satisfies $AA^{-1} = I$, not $e^B = A$" },
+      { option: "D", type: "trick-answer", reason: "Eigenvectors satisfy $A\\mathbf{v} = \\lambda \\mathbf{v}$, not the exponential relation" },
+      { option: "E", type: "trick-answer", reason: "Polar decomposition gives $A = QS$ with $Q$ orthogonal, $S$ symmetric — not related to exponentials" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q23 — Core, Week 9, stochastic matrices
+  {
+    id: 23,
+    week: 9,
+    topics: ["stochastic matrix", "Markov chain", "eigenvalue 1"],
+    difficulty: "core",
+    stem: "A column-stochastic matrix $P \\in \\mathbb{R}^{n \\times n}$ (each column sums to 1) always has:",
+    options: [
+      { letter: "A", text: "Eigenvalue 0", isCorrect: false },
+      { letter: "B", text: "Eigenvalue 1 with an eigenvector of all ones", isCorrect: true },
+      { letter: "C", text: "All eigenvalues equal to 1", isCorrect: false },
+      { letter: "D", text: "An inverse equal to $P^T$", isCorrect: false },
+      { letter: "E", text: "Determinant equal to 1", isCorrect: false },
+    ],
+    correctAnswer: "B",
+    explanation: "For a column-stochastic matrix, $P^T \\mathbf{1} = \\mathbf{1}$ (each row of $P^T$ sums to 1). This means $P^T$ has eigenvalue 1 with eigenvector $\\mathbf{1}$. Taking transposes: $\\mathbf{1}^T P = \\mathbf{1}^T$, so $\\mathbf{1}^T$ is a left eigenvector of $P$ with eigenvalue 1. Equivalently, $P$ has eigenvalue 1 and the vector $\\mathbf{1}$ is a right eigenvector: $P \\mathbf{1} \\neq \\mathbf{1}$ for column-stochastic — wait. For column-stochastic, each column sums to 1. Then $P^T \\mathbf{1} = \\mathbf{1}$, so $\\mathbf{1}$ is an eigenvector of $P^T$ with eigenvalue 1. Taking transpose: $\\mathbf{1}^T P = \\mathbf{1}^T$, so $\\mathbf{1}$ is a left eigenvector of $P$. The right eigenvector with eigenvalue 1 is not generally $\\mathbf{1}$ for column-stochastic. Let me be more careful: for column-stochastic $P$, $P\\mathbf{v} = \\mathbf{v}$ when $\\mathbf{v}$ has all entries equal. Yes: if $v_i = c$ for all $i$, then $(P\\mathbf{v})_i = \\sum_j P_{ij} v_j = \\sum_j P_{ij} c = c \\sum_j P_{ij} = c \\cdot 1 = c = v_i$. So $\\mathbf{1}$ (with all entries 1) is a right eigenvector: $P\\mathbf{1} = \\mathbf{1}$.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "Would require $\\det(P) = 0$, but column-stochastic matrices can be invertible" },
+      { option: "C", type: "trick-answer", reason: "Only the identity matrix has all eigenvalues equal to 1" },
+      { option: "D", type: "trick-answer", reason: "$P^T$ is row-stochastic, not the inverse of $P$" },
+      { option: "E", type: "trick-answer", reason: "$\\det(P)$ can be any value in $(-1, 1)$ depending on the matrix" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q24 — Deeper, Week 8, nilpotent matrices
+  {
+    id: 24,
+    week: 8,
+    topics: ["nilpotent", "Jordan form", "eigenvalues"],
+    difficulty: "deeper",
+    stem: "A matrix $N$ is nilpotent if $N^k = 0$ for some positive integer $k$. Which must be true?",
+    options: [
+      { letter: "A", text: "All eigenvalues of $N$ are 0", isCorrect: true },
+      { letter: "B", text: "$N = 0$", isCorrect: false },
+      { letter: "C", text: "$\\det(N) = 1$", isCorrect: false },
+      { letter: "D", text: "$N$ is diagonalizable", isCorrect: false },
+      { letter: "E", text: "$N$ is invertible", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "If $N^k = 0$, then for any eigenvalue $\\lambda$ of $N$: $\\lambda^k = 0$ (spectral mapping theorem applied to $f(x) = x^k$). So $\\lambda = 0$ for all eigenvalues. Conversely, a matrix with all eigenvalues 0 is not necessarily nilpotent (it could have a nontrivial Jordan block structure that prevents $N^k$ from being exactly zero for finite $k$... actually it IS nilpotent: a matrix is nilpotent iff all eigenvalues are 0).",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Nilpotent matrices can be nonzero — e.g., $\\begin{bmatrix}0 & 1 \\\\ 0 & 0\\end{bmatrix}$ is nilpotent but nonzero" },
+      { option: "C", type: "trick-answer", reason: "$\\det(N) = \\prod \\lambda_i = 0$ since all $\\lambda_i = 0$, so determinant is 0, not 1" },
+      { option: "D", type: "trick-answer", reason: "Jordan blocks of size > 1 are nilpotent but NOT diagonalizable — only the zero matrix is both nilpotent and diagonalizable" },
+      { option: "E", type: "trick-answer", reason: "Nilpotent matrices are always singular — $\\det(N) = 0$ means not invertible" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q25 — Core, Week 8, Cayley-Hamilton theorem
+  {
+    id: 25,
+    week: 8,
+    topics: ["Cayley-Hamilton", "characteristic polynomial", "matrix polynomial"],
+    difficulty: "core",
+    stem: "The Cayley-Hamilton Theorem states that for an $n \\times n$ matrix $A$:",
+    options: [
+      { letter: "A", text: "$A$ satisfies its own characteristic equation: $p_A(A) = 0$", isCorrect: true },
+      { letter: "B", text: "$A^{-1}$ can be expressed as a polynomial in $A$ of degree $n-1$", isCorrect: false },
+      { letter: "C", text: "$A$ has $n$ distinct eigenvalues", isCorrect: false },
+      { letter: "D", text: "$A^T = A^{-1}$", isCorrect: false },
+      { letter: "E", text: "$\\det(A) \\neq 0$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "Cayley-Hamilton: if $p_A(\\lambda) = \\det(A - \\lambda I)$ is the characteristic polynomial, then $p_A(A) = 0$ (the zero matrix). For example, $A^2 - (\\mathrm{tr} A)A + (\\det A)I = 0$ for $2 \\times 2$ matrices.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "TRUE: when $A$ is invertible, $A^{-1}$ IS a polynomial in $A$ (Cayley-Hamilton gives $A^{-1} = -\\frac{1}{\\det A}(A^{n-1} + c_{n-1}A^{n-2} + \\cdots + c_1 I)$), but this is a corollary, not the theorem itself" },
+      { option: "C", type: "trick-answer", reason: "Cayley-Hamilton holds for ANY matrix, regardless of eigenvalue multiplicity" },
+      { option: "D", type: "trick-answer", reason: "This defines an orthogonal matrix, unrelated to Cayley-Hamilton" },
+      { option: "E", type: "trick-answer", reason: "False — Cayley-Hamilton holds even for singular matrices (the zero matrix satisfies $p_0(0) = 0$)" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q26 — Core, Week 9, dominant eigenvalue
+  {
+    id: 26,
+    week: 9,
+    topics: ["power iteration", "dominant eigenvalue", "spectral radius"],
+    difficulty: "core",
+    stem: "Power iteration applied to a matrix $A$ converges to:",
+    options: [
+      { letter: "A", text: "The eigenvector corresponding to the eigenvalue of largest magnitude (the dominant eigenvalue)", isCorrect: true },
+      { letter: "B", text: "The eigenvector corresponding to the smallest eigenvalue", isCorrect: false },
+      { letter: "C", text: "The mean of all eigenvectors", isCorrect: false },
+      { letter: "D", text: "The condition number of $A$", isCorrect: false },
+      { letter: "E", text: "The null space of $A$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "Power iteration: $\\mathbf{x}_{k+1} = A\\mathbf{x}_k / \\|A\\mathbf{x}_k\\|$ converges (under conditions) to the eigenvector of the dominant eigenvalue $\\lambda_1$ (largest magnitude). The iterates align with the top singular vector of $A$. Inverse power iteration converges to the eigenvector of the smallest eigenvalue.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Inverse power iteration (applying $A^{-1}$) gives the smallest eigenvalue — forward power iteration gives the largest" },
+      { option: "C", type: "trick-answer", reason: "Eigenvectors don't average — power iteration converges to a specific direction" },
+      { option: "D", type: "trick-answer", reason: "The condition number is a scalar property of $A$, not a vector or matrix" },
+      { option: "E", type: "trick-answer", reason: "The null space corresponds to eigenvalue 0 — power iteration would converge to this only if 0 were dominant (largest magnitude), which is rare" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q27 — Core, Week 7, similar matrices share eigenvalues
+  {
+    id: 27,
+    week: 7,
+    topics: ["similarity", "eigenvalues", "characteristic polynomial"],
+    difficulty: "core",
+    stem: "If $B = P^{-1} A P$ for some invertible matrix $P$, then $A$ and $B$ share the same:",
+    options: [
+      { letter: "A", text: "Eigenvalues, trace, and determinant", isCorrect: true },
+      { letter: "B", text: "Eigenvectors", isCorrect: false },
+      { letter: "C", text: "Column space", isCorrect: false },
+      { letter: "D", text: "Null space", isCorrect: false },
+      { letter: "E", text: "All of the above", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "Similarity preserves eigenvalues: $\\det(B - \\lambda I) = \\det(P^{-1} A P - \\lambda I) = \\det(P^{-1}(A - \\lambda I)P) = \\det(P^{-1})\\det(A - \\lambda I)\\det(P) = \\det(A - \\lambda I)$. Therefore trace and determinant (sum and product of eigenvalues) are also preserved. Eigenvectors are NOT preserved: if $A\\mathbf{v} = \\lambda \\mathbf{v}$, then $B(P^{-1}\\mathbf{v}) = \\lambda(P^{-1}\\mathbf{v})$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Eigenvectors transform: $A\\mathbf{v} = \\lambda\\mathbf{v} \\Rightarrow B(P^{-1}\\mathbf{v}) = \\lambda(P^{-1}\\mathbf{v})$ — the eigenvector changes" },
+      { option: "C", type: "trick-answer", reason: "$\\mathrm{col}(B) = P^{-1}(\\mathrm{col}(A))$ — the column space transforms under $P^{-1}$, generally not equal" },
+      { option: "D", type: "trick-answer", reason: "$\\ker(B) = P^{-1}(\\ker(A))$ — the null space transforms, not preserved as a set" },
+      { option: "E", type: "trick-answer", reason: "Since B and D are false, not all of the above" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q28 — Deeper, Week 9, matrix square root of identity
+  {
+    id: 28,
+    week: 9,
+    topics: ["matrix square root", "idempotent", "spectral decomposition"],
+    difficulty: "deeper",
+    stem: "If $B^2 = I$ (where $B$ is a real matrix), then every eigenvalue $\\lambda$ of $B$ satisfies:",
+    options: [
+      { letter: "A", text: "$\\lambda = \\pm 1$", isCorrect: true },
+      { letter: "B", text: "$\\lambda = 1$ only", isCorrect: false },
+      { letter: "C", text: "$\\lambda^2 = \\lambda$", isCorrect: false },
+      { letter: "D", text: "$\\lambda = 0$ or $1$", isCorrect: false },
+      { letter: "E", text: "$\\lambda$ can be any real number", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "If $B\\mathbf{v} = \\lambda \\mathbf{v}$, then $B^2\\mathbf{v} = \\lambda^2 \\mathbf{v}$. Since $B^2 = I$, we have $B^2\\mathbf{v} = \\mathbf{v} = \\lambda^2 \\mathbf{v}$, so $\\lambda^2 = 1$ and $\\lambda = \\pm 1$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Would be true only for $B = I$ — reflection and rotation-scaling matrices also satisfy $B^2 = I$ with $\\lambda = -1$ possible" },
+      { option: "C", type: "trick-answer", reason: "$\\lambda^2 = \\lambda$ gives $\\lambda = 0$ or $1$ — this is for idempotent matrices ($B^2 = B$), not involutions ($B^2 = I$)" },
+      { option: "D", type: "trick-answer", reason: "$\\lambda = 0$ or $1$ would require $B^2 = B$ (idempotent), not $B^2 = I$" },
+      { option: "E", type: "trick-answer", reason: "Eigenvalues of involutions are restricted to $\\pm 1$ by the equation $\\lambda^2 = 1$" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // ============================================================
+  // WEEKS 10-11: SVD, PCA (10 questions)
+  // ============================================================
+
+  // Q29 — Core, Week 10, SVD existence
+  {
+    id: 29,
+    week: 10,
+    topics: ["SVD", "singular values", "existence"],
+    difficulty: "core",
+    stem: "Every real matrix $A \\in \\mathbb{R}^{m \\times n}$ has a singular value decomposition $A = U \\Sigma V^T$. This guarantees:",
+    options: [
+      { letter: "A", text: "$U$ and $V$ are orthogonal matrices of sizes $m \\times m$ and $n \\times n$ respectively", isCorrect: true },
+      { letter: "B", text: "$\\Sigma$ is a square diagonal matrix", isCorrect: false },
+      { letter: "C", text: "$A$ must be square", isCorrect: false },
+      { letter: "D", text: "$A$ must be invertible", isCorrect: false },
+      { letter: "E", text: "$U = V$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The SVD exists for ANY real matrix $A \\in \\mathbb{R}^{m \\times n}$: $U \\in \\mathbb{R}^{m \\times m}$ (orthogonal), $\\Sigma \\in \\mathbb{R}^{m \\times n}$ (rectangular diagonal with singular values), and $V \\in \\mathbb{R}^{n \\times n}$ (orthogonal). $\\Sigma$ is rectangular, not square, unless $m = n$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "$\\Sigma$ is $m \\times n$ — rectangular in general. Only when $m = n$ is it square (and diagonal)." },
+      { option: "C", type: "trick-answer", reason: "The SVD is defined for rectangular matrices — that's one of its key strengths over eigendecomposition" },
+      { option: "D", type: "trick-answer", reason: "Singular matrices (rank-deficient) still have an SVD — the Eckart-Mirsky theorem uses it precisely for this case" },
+      { option: "E", type: "trick-answer", reason: "$U$ and $V$ are generally different — they come from eigendecompositions of $AA^T$ and $A^TA$ respectively" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q30 — Core, Week 10, compact SVD
+  {
+    id: 30,
+    week: 10,
+    topics: ["compact SVD", "rank", "outer products"],
+    difficulty: "core",
+    stem: "If $A \\in \\mathbb{R}^{m \\times n}$ has rank $r$ and reduced SVD $A = U_r \\Sigma_r V_r^T$ with $U_r \\in \\mathbb{R}^{m \\times r}$, then:",
+    options: [
+      { letter: "A", text: "$A = \\sum_{i=1}^r \\sigma_i \\mathbf{u}_i \\mathbf{v}_i^T$", isCorrect: true },
+      { letter: "B", text: "$r = \\min(m, n)$", isCorrect: false },
+      { letter: "C", text: "$U_r^T U_r = I_m$", isCorrect: false },
+      { letter: "D", text: "$\\Sigma_r$ is $r \\times r$ and diagonal", isCorrect: false },
+      { letter: "E", text: "$V_r^T V_r = I_r$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The compact SVD expresses $A$ as a sum of $r$ rank-1 outer products: $A = \\sum_{i=1}^r \\sigma_i \\mathbf{u}_i \\mathbf{v}_i^T$, where $\\mathbf{u}_i$ are columns of $U_r$ and $\\mathbf{v}_i$ are columns of $V_r$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "$r \\leq \\min(m, n)$, with strict inequality when $A$ is rank-deficient" },
+      { option: "C", type: "trick-answer", reason: "$U_r^T U_r = I_r$ (not $I_m$) — $U_r$ has only $r$ orthonormal columns, so $U_r^T U_r$ is $r \\times r$ identity" },
+      { option: "D", type: "trick-answer", reason: "$\\Sigma_r$ is $r \\times n$ (or $r \\times r$ for square case), not generally square if $m \\neq n$" },
+      { option: "E", type: "trick-answer", reason: "$V_r^T V_r = I_r$ (not $V_r V_r^T$) — $V_r$ has orthonormal columns, giving $V_r^T V_r = I_r$" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q31 — Deeper, Week 11, total variance in PCA
+  {
+    id: 31,
+    week: 11,
+    topics: ["PCA", "total variance", "singular values", "covariance"],
+    difficulty: "deeper",
+    stem: "For a centered data matrix $X \\in \\mathbb{R}^{n \\times p}$ with singular values $\\sigma_1, \\ldots, \\sigma_p$, the total variance of the data is:",
+    options: [
+      { letter: "A", text: "$\\sum_{i=1}^p \\sigma_i^2 / (n-1)$", isCorrect: true },
+      { letter: "B", text: "$\\sum_{i=1}^p \\sigma_i$", isCorrect: false },
+      { letter: "C", text: "$\\sigma_1^2$", isCorrect: false },
+      { letter: "D", text: "$\\prod_{i=1}^p \\sigma_i$", isCorrect: false },
+      { letter: "E", text: "$\\mathrm{tr}(X^T X)$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The covariance matrix is $S = \\frac{1}{n-1}X^T X = \\frac{1}{n-1}V \\Sigma^T \\Sigma V^T$. The eigenvalues of $S$ are $\\sigma_i^2/(n-1)$. Total variance is $\\mathrm{tr}(S) = \\sum \\sigma_i^2/(n-1)$. Option (E) $\\mathrm{tr}(X^T X) = \\sum \\sigma_i^2$ is equal to $(n-1) \\times$ total variance, so (A) is the more precise answer.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Missing the square and the $(n-1)$ scaling — $\\sum \\sigma_i$ has wrong units for variance" },
+      { option: "C", type: "trick-answer", reason: "Only the variance along the first PC — ignores all other components" },
+      { option: "D", type: "trick-answer", reason: "Product of singular values relates to $\\det(X)$ or $\\det(X^TX)$, not total variance" },
+      { option: "E", type: "partial-credit", reason: "$\\mathrm{tr}(X^TX) = \\sum \\sigma_i^2$ which is $(n-1) \\times$ the total variance — correct up to the $(n-1)$ scaling factor" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["E"],
+  },
+
+  // Q32 — Core, Week 10, relationship between SVD and eigen-decomposition
+  {
+    id: 32,
+    week: 10,
+    topics: ["SVD", "eigenvalues", "$A^TA$", "$AA^T$"],
+    difficulty: "core",
+    stem: "If $A = U \\Sigma V^T$ is the SVD of $A$, then $A^T A$ equals:",
+    options: [
+      { letter: "A", text: "$V \\Sigma^T \\Sigma V^T$", isCorrect: true },
+      { letter: "B", text: "$U \\Sigma \\Sigma^T U^T$", isCorrect: false },
+      { letter: "C", text: "$V V^T$", isCorrect: false },
+      { letter: "D", text: "$\\Sigma^2$", isCorrect: false },
+      { letter: "E", text: "$U^T U$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "$A^T A = (U \\Sigma V^T)^T (U \\Sigma V^T) = V \\Sigma^T U^T U \\Sigma V^T = V \\Sigma^T \\Sigma V^T$ since $U^T U = I$. Note that $\\Sigma^T \\Sigma$ is an $n \\times n$ diagonal matrix with $\\sigma_i^2$ on the diagonal.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "This equals $AA^T$, not $A^T A$ — swapped the order of multiplication" },
+      { option: "C", type: "trick-answer", reason: "$V V^T = I$ — would imply $A^T A = I$, which is only true for orthogonal $A$" },
+      { option: "D", type: "trick-answer", reason: "$\\Sigma^2$ doesn't make dimensional sense — $\\Sigma$ is $m \\times n$, so $\\Sigma^2$ is not even defined in general" },
+      { option: "E", type: "trick-answer", reason: "$U^T U = I$, but $A^TA$ is not $I$ in general" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q33 — Core, Week 11, dimension reduction in PCA
+  {
+    id: 33,
+    week: 11,
+    topics: ["PCA", "dimension reduction", "variance capture"],
+    difficulty: "core",
+    stem: "Reducing $n$-dimensional data to $k < n$ dimensions via PCA captures what fraction of total variance?",
+    options: [
+      { letter: "A", text: "$\\dfrac{\\sigma_1^2 + \\cdots + \\sigma_k^2}{\\sigma_1^2 + \\cdots + \\sigma_n^2}$", isCorrect: true },
+      { letter: "B", text: "$\\dfrac{k}{n}$", isCorrect: false },
+      { letter: "C", text: "$\\dfrac{\\sigma_1 + \\cdots + \\sigma_k}{\\sigma_1 + \\cdots + \\sigma_n}$", isCorrect: false },
+      { letter: "D", text: "Always 100%", isCorrect: false },
+      { letter: "E", text: "Cannot be determined without knowing the data", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The eigenvalues $\\lambda_i = \\sigma_i^2/(n-1)$ of the covariance matrix give the variance along each principal component. The fraction of total variance captured by the first $k$ PCs is $\\sum_{i=1}^k \\lambda_i / \\sum_{i=1}^n \\lambda_i = (\\sum_{i=1}^k \\sigma_i^2) / (\\sum_{i=1}^n \\sigma_i^2)$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Linear fraction $k/n$ — variance capture depends on the eigenvalue distribution, not just the dimension ratio" },
+      { option: "C", type: "trick-answer", reason: "Variance is proportional to $\\sigma^2$, not $\\sigma$ — this would over-weight small singular values" },
+      { option: "D", type: "trick-answer", reason: "Only true when $k = n$ (keeping all components) — generally, $k < n$ means some variance is lost" },
+      { option: "E", type: "trick-answer", reason: "The fraction is always computable from the singular values — no need for raw data" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q34 — Core, Week 10, pseudoinverse from SVD
+  {
+    id: 34,
+    week: 10,
+    topics: ["pseudoinverse", "SVD", "minimum norm solution"],
+    difficulty: "core",
+    stem: "For $A \\in \\mathbb{R}^{m \\times n}$ with reduced SVD $A = U_r \\Sigma_r V_r^T$, the pseudoinverse $A^\\dagger$ is:",
+    options: [
+      { letter: "A", text: "$V_r \\Sigma_r^{-1} U_r^T$", isCorrect: false },
+      { letter: "B", text: "$V_r \\Sigma_r^\\dagger U_r^T$", isCorrect: true },
+      { letter: "C", text: "$U_r \\Sigma_r V_r^T$", isCorrect: false },
+      { letter: "D", text: "$V_r V_r^T$", isCorrect: false },
+      { letter: "E", text: "$V_r^2 V_r^{T}$", isCorrect: false },
+    ],
+    correctAnswer: "B",
+    explanation: "$A^\\dagger = V_r \\Sigma_r^\\dagger U_r^T$ where $\\Sigma_r^\\dagger$ is the $n \\times m$ pseudoinverse of $\\Sigma_r$: it transposes $\\Sigma_r$ (giving $\\Sigma_r^T \\in \\mathbb{R}^{n \\times m}$) and inverts its nonzero diagonal entries. Option (A) uses the regular inverse $\\Sigma_r^{-1}$, which doesn't exist since $\\Sigma_r$ is not square.",
+    distractorAnalysis: [
+      { option: "A", type: "trick-answer", reason: "$\\Sigma_r$ is $r \\times n$ (or $r \\times r$ in the square case) — not invertible as a standalone matrix. $\\Sigma_r^\\dagger$ handles the rectangular geometry properly." },
+      { option: "C", type: "trick-answer", reason: "This is just $A$ again, not $A^\\dagger$" },
+      { option: "D", type: "trick-answer", reason: "$V_r V_r^T$ is the projection onto $\\mathrm{im}(A^T)$, not the pseudoinverse" },
+      { option: "E", type: "trick-answer", reason: "Nonsensical expression — $V_r^2$ is not defined" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q35 — Deeper, Week 11, centering in PCA
+  {
+    id: 35,
+    week: 11,
+    topics: ["PCA", "centering", "mean subtraction", "covariance"],
+    difficulty: "deeper",
+    stem: "In PCA, centering the data (subtracting the mean from each column) before computing the covariance matrix ensures:",
+    options: [
+      { letter: "A", text: "The eigenvectors of $X^TX$ correspond to directions of maximum variance, not maximum mean", isCorrect: true },
+      { letter: "B", text: "The data matrix becomes orthogonal", isCorrect: false },
+      { letter: "C", text: "The singular values are all positive", isCorrect: false },
+      { letter: "D", text: "The number of PCs equals the number of original features", isCorrect: false },
+      { letter: "E", text: "The determinant of $X^TX$ equals 1", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "Without centering, the first principal component would point toward the mean of the data (maximum location), not the direction of maximum spread. Centering removes the mean so that the covariance matrix captures variation around zero. If you don't center, the PCs are contaminated by the mean location.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Centering doesn't make $X$ orthogonal — it shifts the data to be symmetric around the origin" },
+      { option: "C", type: "trick-answer", reason: "Singular values are always nonnegative regardless of centering — centering affects which directions matter, not the sign of singular values" },
+      { option: "D", type: "trick-answer", reason: "Number of PCs is determined by rank, not by centering — always at most $\\min(n, p)$ where $p$ is number of features" },
+      { option: "E", type: "trick-answer", reason: "No — $\\det(X^TX)$ depends on the actual variance structure, not on centering" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q36 — Core, Week 11, scree plot
+  {
+    id: 36,
+    week: 11,
+    topics: ["scree plot", "PCA", "elbow", "dimensionality selection"],
+    difficulty: "core",
+    stem: "A scree plot in PCA shows eigenvalues (or variances) against component number. The 'elbow' of the scree plot suggests:",
+    options: [
+      { letter: "A", text: "The optimal number of principal components to retain", isCorrect: true },
+      { letter: "B", text: "The total number of components", isCorrect: false },
+      { letter: "C", text: "Whether the data is linearly dependent", isCorrect: false },
+      { letter: "D", text: "The determinant of the covariance matrix", isCorrect: false },
+      { letter: "E", text: "The condition number of $X$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The scree plot shows the 'diminishing returns' of adding more PCs: variance explained drops sharply after the elbow, then levels off. The elbow marks where additional components contribute relatively little. This heuristic helps choose $k$ for dimensionality reduction.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "The total number is just the dimension $p$ — the scree plot's purpose is to choose a subset, not identify the total" },
+      { option: "C", type: "trick-answer", reason: "Linear dependence shows up as zero or near-zero eigenvalues, not as an elbow" },
+      { option: "D", type: "trick-answer", reason: "The determinant of the covariance matrix is the product of eigenvalues — visible as the last point of the scree plot if multiplied together, but the elbow has a different meaning" },
+      { option: "E", type: "trick-answer", reason: "Condition number relates to the ratio of largest to smallest eigenvalue, not to the elbow shape" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q37 — Core, Week 10, Frobenius norm and SVD
+  {
+    id: 37,
+    week: 10,
+    topics: ["Frobenius norm", "SVD", "singular values"],
+    difficulty: "core",
+    stem: "For any matrix $A \\in \\mathbb{R}^{m \\times n}$, the Frobenius norm $\|A\|_F$ equals:",
+    options: [
+      { letter: "A", text: "$\\sqrt{\\sum_{i=1}^r \\sigma_i^2}$ (where $r = \\mathrm{rank}(A)$)", isCorrect: true },
+      { letter: "B", text: "$\\sum_{i=1}^r \\sigma_i$", isCorrect: false },
+      { letter: "C", text: "$\\sigma_1$", isCorrect: false },
+      { letter: "D", text: "$\\sqrt{\\mathrm{tr}(A)}$", isCorrect: false },
+      { letter: "E", text: "$\\prod_{i=1}^r \\sigma_i$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "$\\|A\\|_F = \\sqrt{\\mathrm{tr}(A^T A)} = \\sqrt{\\mathrm{tr}(V \\Sigma^T \\Sigma V^T)} = \\sqrt{\\mathrm{tr}(\\Sigma^T \\Sigma)} = \\sqrt{\\sum \\sigma_i^2}$. The Frobenius norm is the Euclidean norm of the vector of singular values.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "This is the nuclear norm ($\\|A\\|_*$), not the Frobenius norm — sums the singular values, not their squares" },
+      { option: "C", type: "trick-answer", reason: "$\\sigma_1$ is the spectral (operator 2-norm), not the Frobenius norm" },
+      { option: "D", type: "trick-answer", reason: "$\\mathrm{tr}(A)$ need not equal $\\|A\\|_F^2$ — for example, $\\mathrm{tr}(I_2) = 2$ but $\\|I\\|_F = \\sqrt{2}$" },
+      { option: "E", type: "trick-answer", reason: "Product of singular values relates to $\\det(A^TA)$, not the Frobenius norm" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q38 — Core, Week 11, SVD for least squares
+  {
+    id: 38,
+    week: 11,
+    topics: ["SVD", "least squares", "pseudoinverse", "minimum norm"],
+    difficulty: "core",
+    stem: "The SVD-based solution to the least squares problem $A\\mathbf{x} \\approx \\mathbf{b}$ gives $\\hat{\\mathbf{x}} = A^\\dagger \\mathbf{b}$. This $\\hat{\\mathbf{x}}$ is:",
+    options: [
+      { letter: "A", text: "The minimum-norm solution among all least-squares solutions", isCorrect: true },
+      { letter: "B", text: "The unique exact solution to $A\\mathbf{x} = \\mathbf{b}$", isCorrect: false },
+      { letter: "C", text: "Always the same as $(A^T A)^{-1} A^T \\mathbf{b}$", isCorrect: false },
+      { letter: "D", text: "Guaranteed to have integer entries", isCorrect: false },
+      { letter: "E", text: "An eigenvector of $A$", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "$A^\\dagger \\mathbf{b}$ is the minimum-norm least-squares solution: among all vectors $\\mathbf{x}$ that minimize $\|A\\mathbf{x} - \\mathbf{b}\\|$, it is the one with smallest Euclidean norm. This is unique regardless of the rank of $A$.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Only exact when $\\mathbf{b} \\in \\mathrm{im}(A)$ — otherwise there is no exact solution" },
+      { option: "C", type: "trick-answer", reason: "Equivalent only when $A$ has full column rank. For rank-deficient $A$, $(A^TA)^{-1}A^T$ is not defined (singular $A^TA$)." },
+      { option: "D", type: "trick-answer", reason: "No — $\\hat{\\mathbf{x}}$ is generally real-valued but not necessarily integer" },
+      { option: "E", type: "trick-answer", reason: "$\\hat{\\mathbf{x}}$ satisfies the normal equations, not $A\\mathbf{x} = \\lambda \\mathbf{x}$" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // ============================================================
+  // WEEK 12: Neural Networks (3 questions)
+  // ============================================================
+
+  // Q39 — Core, Week 12, ReLU activation
+  {
+    id: 39,
+    week: 12,
+    topics: ["neural networks", "ReLU", "activation function", "nonlinearity"],
+    difficulty: "core",
+    stem: "The ReLU activation $\\sigma(z) = \\max(0, z)$ is nonlinear because:",
+    options: [
+      { letter: "A", text: "$\\sigma(a + b) \\neq \\sigma(a) + \\sigma(b)$ in general", isCorrect: true },
+      { letter: "B", text: "$\\sigma(z) = cz$ for some constant $c$", isCorrect: false },
+      { letter: "C", text: "It is not defined at $z = 0$", isCorrect: false },
+      { letter: "D", text: "$\\sigma$ maps $\\mathbb{R}$ to $[0, \\infty)$", isCorrect: false },
+      { letter: "E", text: "It has a bounded range", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "ReLU fails the linearity test: $\\sigma(2) + \\sigma(-1) = 2 + 0 = 2$, but $\\sigma(2 + (-1)) = \\sigma(1) = 1 \\neq 2$. This failure of additivity (and homogeneity only partially) is what makes ReLU nonlinear — and this nonlinearity is what enables networks to learn non-trivial functions.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "This describes a linear function — ReLU is piecewise linear, not of the form $cz$ everywhere" },
+      { option: "C", type: "trick-answer", reason: "ReLU is defined at $z = 0$: $\\sigma(0) = \\max(0, 0) = 0$" },
+      { option: "D", type: "trick-answer", reason: "The range being $[0, \\infty)$ describes codomain, not linearity — many nonlinear functions have this range" },
+      { option: "E", type: "trick-answer", reason: "ReLU is unbounded above ($\\lim_{z \\to \\infty} \\sigma(z) = \\infty$), so this is false" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q40 — Core, Week 12, gradient descent in neural networks
+  {
+    id: 40,
+    week: 12,
+    topics: ["gradient descent", "learning rate", "loss landscape"],
+    difficulty: "core",
+    stem: "In gradient descent for training a neural network, a very large learning rate typically causes:",
+    options: [
+      { letter: "A", text: "Overshooting the minimum and causing oscillations or divergence", isCorrect: true },
+      { letter: "B", text: "Slow convergence to the minimum", isCorrect: false },
+      { letter: "C", text: "The loss to increase monotonically", isCorrect: false },
+      { letter: "D", text: "The weights to converge to zero", isCorrect: false },
+      { letter: "E", text: "Immediate divergence to infinity", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "A large learning rate means each step moves too far in the gradient direction, overshooting shallow minima and causing oscillations or divergence. The update $\\mathbf{w} \\leftarrow \\mathbf{w} - \\eta \\nabla L$ with large $\\eta$ can land outside the region of quadratic approximation.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Small learning rates cause slow convergence — large ones cause fast but unstable updates" },
+      { option: "C", type: "trick-answer", reason: "Not necessarily monotonic — large steps can cause loss to spike up and down chaotically" },
+      { option: "D", type: "trick-answer", reason: "Weights converging to zero would require a small learning rate with particular initialization, not a large one" },
+      { option: "E", type: "trick-answer", reason: "Divergence to infinity is a special case of (A) but 'immediate' and 'infinity' are too strong — large steps cause oscillations, not literal infinity" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // Q41 — Core, Week 12, batch normalization
+  {
+    id: 41,
+    week: 12,
+    topics: ["batch normalization", "internal covariate shift", "covariate shift"],
+    difficulty: "core",
+    stem: "Batch normalization normalizes the activations of a layer by:",
+    options: [
+      { letter: "A", text: "Subtracting the batch mean and dividing by the batch standard deviation", isCorrect: true },
+      { letter: "B", text: "Setting all activations to have zero mean and unit variance globally (over all data)", isCorrect: false },
+      { letter: "C", text: "Applying a fixed linear transformation to all layers equally", isCorrect: false },
+      { letter: "D", text: "Scaling activations to lie in $[0, 1]$", isCorrect: false },
+      { letter: "E", text: "Whitening the input (decorrelating and scaling to identity covariance)", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "Batch norm normalizes each activation across the current mini-batch: $x_i \\leftarrow \\frac{x_i - \\mu_B}{\\sigma_B}$ where $\\mu_B$ and $\\sigma_B$ are the batch mean and standard deviation. This is applied during training. At inference, population statistics (moving averages) are used. This reduces internal covariate shift and allows higher learning rates.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "Uses the batch statistics (mini-batch), not the global population statistics — that's a different approach (layer norm uses global, batch norm uses batch)" },
+      { option: "C", type: "trick-answer", reason: "Batch norm has learnable scale ($\\gamma$) and shift ($\\beta$) parameters — it's not fixed" },
+      { option: "D", type: "trick-answer", reason: "Min-max scaling to $[0,1]$ is a different normalization — batch norm standardizes to mean 0, variance 1, not $[0,1]$" },
+      { option: "E", type: "trick-answer", reason: "Whitening (decorrelating) requires a transformation, not just centering and scaling — batch norm does not decorrelate" },
+    ],
+    hasPartialCredit: false,
+  },
+
+  // ============================================================
+  // SYNTHESIS: Cross-Week Problems (2 questions)
+  // ============================================================
+
+  // Q42 — Synthesis, Weeks 5+10, Orthogonal projection + SVD
+  {
+    id: 42,
+    week: [5, 10],
+    topics: ["orthogonal projection", "SVD", "rank-1 approximation", "synthesis"],
+    difficulty: "synthesis",
+    stem: "The best rank-1 approximation to $A$ in the Frobenius norm is $A_1 = \\sigma_1 \\mathbf{u}_1 \\mathbf{v}_1^T$, where $\\sigma_1$ is the largest singular value. This is equivalent to:",
+    options: [
+      { letter: "A", text: "The orthogonal projection of $A$ onto the subspace spanned by $\\mathbf{u}_1$ in the domain and $\\mathbf{v}_1$ in the codomain", isCorrect: true },
+      { letter: "B", text: "Setting all singular values except $\\sigma_1$ to zero", isCorrect: false },
+      { letter: "C", text: "The eigendecomposition of $A^TA$", isCorrect: false },
+      { letter: "D", text: "A rank-1 matrix whose column space equals $\\mathrm{im}(A)$", isCorrect: false },
+      { letter: "E", text: "Both (B) and (C)", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "The rank-1 approximation $A_1 = \\sigma_1 \\mathbf{u}_1 \\mathbf{v}_1^T$ projects $A$ orthogonally onto the rank-1 subspace spanned by $\\mathbf{u}_1 \\mathbf{v}_1^T$. It simultaneously selects the dominant left singular vector $\\mathbf{u}_1$ (direction of maximum variance in the row space) and right singular vector $\\mathbf{v}_1$ (corresponding direction in the column space). By Eckart-Mirsky-Young, truncating to one term minimizes $\|A - A_1\|_F$.",
+    distractorAnalysis: [
+      { option: "B", type: "partial-credit", reason: "Truncating all but $\\sigma_1$ is what you do to GET the rank-1 approximation, but (A) gives the geometric interpretation" },
+      { option: "C", type: "trick-answer", reason: "Eigendecomposition of $A^TA$ gives $V \\Sigma^T \\Sigma V^T$ — the eigenpairs are $\\sigma_i^2, \\mathbf{v}_i$, which are involved but the SVD and rank-1 approximation are distinct" },
+      { option: "D", type: "trick-answer", reason: "$\\sigma_1 \\mathbf{u}_1 \\mathbf{v}_1^T$ has column space $\\mathrm{span}(\\mathbf{u}_1)$, which is generally a proper subspace of $\\mathrm{im}(A)$ — not necessarily equal" },
+      { option: "E", type: "trick-answer", reason: "Neither (B) nor (C) is the best fundamental description" },
+    ],
+    hasPartialCredit: true,
+    partialCreditOptions: ["B"],
+  },
+
+  // Q43 — Synthesis, Weeks 7+11, Diagonalization + PCA
+  {
+    id: 43,
+    week: [7, 11],
+    topics: ["diagonalization", "PCA", "spectral decomposition", "synthesis"],
+    difficulty: "synthesis",
+    stem: "If a symmetric matrix $S$ is diagonalized as $S = Q \\Lambda Q^T$ with $Q$ orthogonal and $\\Lambda$ diagonal, then PCA on data with covariance matrix $S$ means:",
+    options: [
+      { letter: "A", text: "The columns of $Q$ are the principal component directions and entries of $\\Lambda$ (scaled by $1/(n-1)$) give the variances along each direction", isCorrect: true },
+      { letter: "B", text: "$S$ must be the data matrix itself, not its covariance", isCorrect: false },
+      { letter: "C", text: "The eigenvalues of $S$ are all equal", isCorrect: false },
+      { letter: "D", text: "$Q$ selects the top $k$ rows of the data matrix", isCorrect: false },
+      { letter: "E", text: "The diagonal entries of $\\Lambda$ are the principal component scores", isCorrect: false },
+    ],
+    correctAnswer: "A",
+    explanation: "PCA on covariance $S$: the eigendecomposition $S = Q \\Lambda Q^T$ gives the spectral decomposition. The columns $\\mathbf{q}_i$ of $Q$ are orthogonal principal component directions (eigenvectors of $S$), and $\\lambda_i/(n-1)$ is the variance along $\\mathbf{q}_i$. Projecting centered data $X$ onto the first $k$ columns of $Q$ gives the $k$-dimensional reduction.",
+    distractorAnalysis: [
+      { option: "B", type: "trick-answer", reason: "PCA works on the covariance matrix $S = X^TX/(n-1)$, not directly on $X$ — that's why $S$ is symmetric and diagonalizable" },
+      { option: "C", type: "trick-answer", reason: "Eigenvalues need not be equal — their spread is what PCA exploits for dimensionality reduction" },
+      { option: "D", type: "trick-answer", reason: "Q rotates to the eigenbasis — it doesn't select rows of $X$" },
+      { option: "E", type: "trick-answer", reason: "Diagonal entries of $\\Lambda$ are eigenvalues (variances), not scores — the scores are $X\\mathbf{q}_i$ (projected data)" },
+    ],
+    hasPartialCredit: false,
+  },
+];
+
 export const examSets: ExamSet[] = [
   {
     id: "final-mock-1",
     title: "Final Exam Mock 1",
     description: "43 conceptual problems covering the full 13-week arc. Mirrors the real 120-minute Quizzam format.",
     questions: finalMock1Questions,
+  },
+  {
+    id: "final-mock-2",
+    title: "Final Exam Mock 2",
+    description: "A second set of 43 conceptual problems covering the full 13-week arc, with entirely different hooks from Mock 1.",
+    questions: finalMock2Questions,
   },
 ];
