@@ -44,6 +44,13 @@ export interface QuestionResult {
   isPartialCredit: boolean;
 }
 
+export interface ExamSet {
+  id: string;
+  title: string;
+  description: string;
+  questions: Question[];
+}
+
 export interface ExamResults {
   totalCorrect: number;
   totalPartialCredit: number;

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useExamStore } from "@/stores/examStore";
-import { questions } from "@/data/questions";
+import { examSets } from "@/data/exam-sets";
 import type { ExamResults, TopicScore, QuestionResult } from "@/types/exam";
 import MathRenderer from "@/components/ui/MathRenderer";
 
@@ -16,7 +16,7 @@ const TOPIC_GROUPS: { weekRange: string; label: string; weeks: (number | string)
   { weekRange: "Synthesis", label: "Cross-Week Problems", weeks: ["synthesis"] },
 ];
 
-function computeResults(answers: Record<number, string>, startTime: number | null, endTime: number | null): ExamResults {
+function computeResults(questions: typeof examSets[number]["questions"], answers: Record<number, string>, startTime: number | null, endTime: number | null): ExamResults {
   const questionResults: QuestionResult[] = questions.map((q) => {
     const yourAnswer = (answers[q.id] ?? null) as string | null;
     const isCorrect = yourAnswer === q.correctAnswer;
@@ -73,7 +73,7 @@ function computeResults(answers: Record<number, string>, startTime: number | nul
 
 export default function ResultsPage() {
   const router = useRouter();
-  const { examStatus, answers, startTime, endTime, resetExam } = useExamStore();
+  const { examStatus, examSetId, answers, startTime, endTime, resetExam } = useExamStore();
   const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null);
 
   useEffect(() => {
@@ -82,9 +82,12 @@ export default function ResultsPage() {
     }
   }, [examStatus, router]);
 
+  const activeSet = examSets.find((s) => s.id === examSetId);
+  const questions = activeSet?.questions ?? [];
+
   const results = useMemo(
-    () => (examStatus === "submitted" ? computeResults(answers, startTime, endTime) : null),
-    [answers, startTime, endTime, examStatus]
+    () => (examStatus === "submitted" && questions.length > 0 ? computeResults(questions, answers, startTime, endTime) : null),
+    [questions, answers, startTime, endTime, examStatus]
   );
 
   if (!results) return null;
@@ -100,8 +103,8 @@ export default function ResultsPage() {
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
         {/* Score summary */}
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h1 className="text-2xl font-bold text-exam-dark mb-4">Exam Results</h1>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <h1 className="text-2xl font-bold text-exam-dark mb-1">{activeSet?.title ?? "Exam"} Results</h1>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
             <div className="text-center">
               <p className="text-3xl font-bold text-exam-blue">{results.rawScore}/{results.totalQuestions}</p>
               <p className="text-xs text-gray-500 mt-1">Raw Score</p>
@@ -148,7 +151,7 @@ export default function ResultsPage() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <h2 className="text-lg font-semibold text-exam-dark mb-4">Answer Review</h2>
           <div className="space-y-3">
-            {questions.map((q) => {
+            {questions.map((q, idx) => {
               const result = results.questionResults.find((r) => r.questionId === q.id);
               if (!result) return null;
               const isExpanded = expandedQuestion === q.id;
@@ -159,7 +162,7 @@ export default function ResultsPage() {
                     className="w-full text-left px-4 py-3 flex items-center justify-between hover:bg-gray-50"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-gray-500">Problem {q.id}</span>
+                      <span className="text-sm font-medium text-gray-500">Problem {idx + 1}</span>
                       {result.isCorrect ? (
                         <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded">Correct</span>
                       ) : result.isPartialCredit ? (
@@ -173,12 +176,10 @@ export default function ResultsPage() {
 
                   {isExpanded && (
                     <div className="border-t border-gray-200 px-4 py-4 space-y-4 bg-gray-50">
-                      {/* Stem */}
                       <div className="text-sm">
                         <MathRenderer content={q.stem} />
                       </div>
 
-                      {/* Options */}
                       <div className="space-y-1.5">
                         {q.options.map((opt) => {
                           const isYourAnswer = result.yourAnswer === opt.letter;
@@ -208,13 +209,11 @@ export default function ResultsPage() {
                         })}
                       </div>
 
-                      {/* Explanation */}
                       <div className="text-sm text-gray-700 border-t border-gray-200 pt-3 space-y-2">
                         <p className="font-semibold text-exam-dark">Explanation</p>
                         <MathRenderer content={q.explanation} />
                       </div>
 
-                      {/* Distractor analysis */}
                       {q.distractorAnalysis.length > 0 && (
                         <div className="text-xs text-gray-500 border-t border-gray-200 pt-3 space-y-1">
                           <p className="font-semibold">Distractor Analysis</p>
@@ -245,7 +244,7 @@ export default function ResultsPage() {
             }}
             className="px-6 py-3 bg-exam-blue text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Retake Exam
+            Back to Exam Selection
           </button>
         </div>
       </div>

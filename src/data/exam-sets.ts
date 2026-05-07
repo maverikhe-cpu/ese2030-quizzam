@@ -1,6 +1,6 @@
-import type { Question } from "@/types/exam";
+import type { Question, ExamSet } from "@/types/exam";
 
-export const questions: Question[] = [
+const finalMock1Questions: Question[] = [
   // ============================================================
   // WEEKS 1-3: Systems, Vector Spaces, Linear Maps, FTLA (8 questions)
   // ============================================================
@@ -1112,5 +1112,14 @@ export const questions: Question[] = [
       { option: "E", type: "trick-answer", reason: "Power iteration converges to a specific direction, not random — it's deterministic (up to sign)" },
     ],
     hasPartialCredit: false,
+  },
+];
+
+export const examSets: ExamSet[] = [
+  {
+    id: "final-mock-1",
+    title: "Final Exam Mock 1",
+    description: "43 conceptual problems covering the full 13-week arc. Mirrors the real 120-minute Quizzam format.",
+    questions: finalMock1Questions,
   },
 ];

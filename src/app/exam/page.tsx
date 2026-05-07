@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useExamStore } from "@/stores/examStore";
-import { questions } from "@/data/questions";
+import { examSets } from "@/data/exam-sets";
 import MathRenderer from "@/components/ui/MathRenderer";
-import type { OptionLetter } from "@/types/exam";
-
-const TOTAL_QUESTIONS = questions.length;
+import type { OptionLetter, Question } from "@/types/exam";
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -16,8 +14,18 @@ function formatTime(seconds: number): string {
 }
 
 export default function ExamPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>}>
+      <ExamContent />
+    </Suspense>
+  );
+}
+
+function ExamContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const {
+    examSetId,
     examStatus,
     timeRemaining,
     currentQuestionIndex,
@@ -36,22 +44,32 @@ export default function ExamPage() {
   const [showNav, setShowNav] = useState(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const activeSet = examSets.find((s) => s.id === (examSetId ?? searchParams.get("set")));
+  const questions = activeSet?.questions ?? [];
+  const TOTAL_QUESTIONS = questions.length;
+  const currentQuestion: Question | undefined = questions[currentQuestionIndex];
+
   const answeredCount = Object.keys(answers).length;
   const flaggedCount = flaggedQuestions.length;
   const unanswered = TOTAL_QUESTIONS - answeredCount;
   const isLowTime = timeRemaining <= 300;
-  const selectedAnswer = answers[currentQuestion.id] ?? null;
-  const isFlagged = flaggedQuestions.includes(currentQuestion.id);
+  const selectedAnswer = currentQuestion ? (answers[currentQuestion.id] ?? null) : null;
+  const isFlagged = currentQuestion ? flaggedQuestions.includes(currentQuestion.id) : false;
 
   useEffect(() => {
-    if (examStatus === "not-started") {
-      startExam();
-    }
     if (examStatus === "submitted") {
       router.push("/results");
+      return;
     }
-  }, [examStatus, startExam, router]);
+    if (examStatus === "not-started") {
+      const setId = searchParams.get("set");
+      if (!setId || !examSets.find((s) => s.id === setId)) {
+        router.push("/");
+        return;
+      }
+      startExam(setId);
+    }
+  }, [examStatus, searchParams, startExam, router]);
 
   useEffect(() => {
     if (examStatus !== "in-progress") return;
@@ -70,11 +88,11 @@ export default function ExamPage() {
 
   const handleSelect = useCallback(
     (letter: OptionLetter) => {
-      if (examStatus !== "in-progress") return;
+      if (examStatus !== "in-progress" || !currentQuestion) return;
       if (answers[currentQuestion.id] === letter) return;
       setAnswer(currentQuestion.id, letter);
     },
-    [examStatus, answers, currentQuestion.id, setAnswer]
+    [examStatus, answers, currentQuestion, setAnswer]
   );
 
   const handleSubmit = useCallback(() => {
@@ -83,26 +101,26 @@ export default function ExamPage() {
     router.push("/results");
   }, [submitExam, router]);
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (examStatus !== "in-progress") return;
+  useEffect(() => {
+    if (examStatus !== "in-progress") return;
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight" || e.key === "n") {
         nextQuestion(TOTAL_QUESTIONS);
       } else if (e.key === "ArrowLeft" || e.key === "p") {
         prevQuestion();
-      } else if (e.key === "f") {
+      } else if (e.key === "f" && currentQuestion) {
         toggleFlag(currentQuestion.id);
-      } else if (["a", "b", "c", "d", "e"].includes(e.key.toLowerCase())) {
+      } else if (["a", "b", "c", "d", "e"].includes(e.key.toLowerCase()) && currentQuestion) {
         handleSelect(e.key.toUpperCase() as OptionLetter);
       }
-    },
-    [examStatus, nextQuestion, prevQuestion, toggleFlag, currentQuestion.id, handleSelect]
-  );
-
-  useEffect(() => {
+    };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+  }, [examStatus, nextQuestion, prevQuestion, toggleFlag, currentQuestion, handleSelect, TOTAL_QUESTIONS]);
+
+  if (!activeSet || !currentQuestion) {
+    return null;
+  }
 
   if (examStatus === "submitted") return null;
 
@@ -139,7 +157,7 @@ export default function ExamPage() {
       </header>
 
       <div className="flex flex-1">
-        {/* Navigation sidebar — desktop always, mobile toggle */}
+        {/* Navigation sidebar */}
         <aside
           className={`${
             showNav ? "block" : "hidden"
@@ -166,7 +184,7 @@ export default function ExamPage() {
                   className={className}
                   onClick={() => setCurrentQuestion(idx)}
                 >
-                  {q.id}
+                  {idx + 1}
                 </button>
               );
             })}
@@ -190,10 +208,9 @@ export default function ExamPage() {
         {/* Main question area */}
         <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-6 md:px-8">
           <div className="space-y-6">
-            {/* Question header */}
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-exam-dark">
-                Problem {currentQuestion.id}
+                Problem {currentQuestionIndex + 1}
                 <span className="ml-2 text-sm font-normal text-gray-400">
                   (Week {Array.isArray(currentQuestion.week) ? currentQuestion.week.join(", ") : currentQuestion.week})
                 </span>
@@ -210,12 +227,10 @@ export default function ExamPage() {
               </button>
             </div>
 
-            {/* Stem */}
             <div className="text-base leading-relaxed">
               <MathRenderer content={currentQuestion.stem} />
             </div>
 
-            {/* Answer options */}
             <div className="space-y-2">
               {currentQuestion.options.map((opt) => {
                 const isSelected = selectedAnswer === opt.letter;
@@ -247,7 +262,6 @@ export default function ExamPage() {
             </div>
           </div>
 
-          {/* Navigation buttons */}
           <div className="flex items-center justify-between mt-8 pt-4 border-t border-gray-200">
             <button
               onClick={() => prevQuestion()}

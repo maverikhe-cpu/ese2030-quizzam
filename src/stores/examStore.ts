@@ -4,9 +4,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { OptionLetter } from "@/types/exam";
 
-const EXAM_DURATION = 120 * 60; // 120 minutes in seconds
+const EXAM_DURATION = 120 * 60;
 
 interface ExamState {
+  examSetId: string | null;
   examStatus: "not-started" | "in-progress" | "submitted";
   startTime: number | null;
   endTime: number | null;
@@ -15,7 +16,7 @@ interface ExamState {
   answers: Record<number, OptionLetter>;
   flaggedQuestions: number[];
 
-  startExam: () => void;
+  startExam: (setId: string) => void;
   setAnswer: (questionId: number, option: OptionLetter) => void;
   clearAnswer: (questionId: number) => void;
   toggleFlag: (questionId: number) => void;
@@ -32,6 +33,7 @@ interface ExamState {
 export const useExamStore = create<ExamState>()(
   persist(
     (set, get) => ({
+      examSetId: null,
       examStatus: "not-started",
       startTime: null,
       endTime: null,
@@ -40,8 +42,9 @@ export const useExamStore = create<ExamState>()(
       answers: {},
       flaggedQuestions: [],
 
-      startExam: () => {
+      startExam: (setId) => {
         set({
+          examSetId: setId,
           examStatus: "in-progress",
           startTime: Date.now(),
           endTime: null,
@@ -102,6 +105,7 @@ export const useExamStore = create<ExamState>()(
 
       resetExam: () => {
         set({
+          examSetId: null,
           examStatus: "not-started",
           startTime: null,
           endTime: null,
@@ -119,6 +123,7 @@ export const useExamStore = create<ExamState>()(
     {
       name: "ese2030-exam",
       partialize: (state) => ({
+        examSetId: state.examSetId,
         examStatus: state.examStatus,
         startTime: state.startTime,
         endTime: state.endTime,
