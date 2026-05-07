@@ -1,21 +1,30 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "katex/dist/katex.min.css";
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-exam-blue: #2563eb;
+  --color-exam-dark: #1e293b;
+  --color-exam-correct: #16a34a;
+  --color-exam-incorrect: #dc2626;
+  --color-exam-flagged: #f59e0b;
+  --color-exam-unanswered: #94a3b8;
+  --color-exam-partial: #d97706;
+  --color-exam-surface: #f8fafc;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+:root {
+  --background: #ffffff;
+  --foreground: #1e293b;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #e2e8f0;
   }
 }
 
@@ -23,4 +32,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.katex-container .katex-display {
+  margin: 0.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex-container .katex {
+  font-size: 1.05em;
 }
